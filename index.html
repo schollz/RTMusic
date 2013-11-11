@@ -1,0 +1,30 @@
+<html>
+
+<input onchange="sendData()" type="text" id="text">
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('news', function (data) {
+    console.log(data);
+    //socket.emit('my other event', { my: 'data' });
+  });
+  socket.on('update', function (data) {
+    var input = document.getElementById('text');
+    input.value = data;
+    var time = new Date().getMilliseconds();
+    console.log('response from setver' + time); 
+      //socket.emit('my other event', { my: 'data' });
+  });
+
+   function sendData(){
+    var text = document.getElementById('text').value;
+    socket.emit('userData', text);
+    var time = new Date().getMilliseconds();
+    console.log('sent time ' + time);
+   }
+
+</script>
+
+</html>
