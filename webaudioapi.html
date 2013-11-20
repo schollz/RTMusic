@@ -13,15 +13,32 @@
   <button onclick="stopSound()" disabled>Stop</button>
   <input type="text" id="text">
 <script src="/socket.io/socket.io.js"></script>
+<script src="http://cdn.binaryjs.com/0/binary.js"></script>
 <script>
 var context = new window.webkitAudioContext();
 var source = null;
 var audioBuffer = null;
 
-var socket = io.connect('http://localhost:82');
-socket.on('update', function (data) {
-  console.log(data);
-      //socket.emit('my other event', { my: 'data' });
+var client = new BinaryClient('ws://localhost:83/binary-endpoint');
+client.on('stream', function(stream, meta){  
+  console.log("getting stream");
+  var parts = [];
+  stream.on('data', function(data){
+    parts.push(data);
+  });
+  stream.on('end', function(){
+    var img = document.createElement("img");
+    img.src = (window.URL || window.webkitURL).createObjectURL(new Blob(parts));
+    document.body.appendChild(img);
+  });
+});
+
+var socket = io.connect('http://localhost:83');
+socket.on('init', function (data) {
+  var text = document.getElementById('text').value;
+  if (data.client != text) {
+    console.log(data.file);
+  }
 });
 socket.on('play', function (data) {
   var text = document.getElementById('text').value;
@@ -91,7 +108,7 @@ fileInput.addEventListener('change', function(e) {
   var reader = new FileReader();
   reader.onload = function(e) {
     initSound(this.result);
-    socket.emit('userData', this.result.byteLength);
+    socket.emit('init', document.getElementById('text').value);
   };
   reader.readAsArrayBuffer(this.files[0]);
 }, false);
@@ -104,7 +121,7 @@ function loadSoundFile(url) {
   xhr.responseType = 'arraybuffer';
   xhr.onload = function(e) {
     initSound(this.response); // this.response is an ArrayBuffer.
-    socket.emit('userData', this.response.byteLength);
+    socket.emit('init', this.response);
   };
   xhr.send();
 }
