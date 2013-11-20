@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <title>Binaryjs Image</title>
+  <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
+  <button onclick="playSound()" disabled>Start</button>
+  <button onclick="stopSound()" disabled>Stop</button>
 	<script>
 	var context = new window.webkitAudioContext();
 	var source = null;
@@ -21,17 +23,18 @@
     	// var test = new MediaSource();
     	// var audio = document.createElement("audio");
     	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
+      var size = 0;
     	stream.on('data', function(data){
     		var now = new Date().getTime();
     		console.log("time since last buffer received: " + (now-laststep) + " ms");
     		laststep = new Date().getTime();
-    		//console.log(data.byteLength);
-      		parts.push(data);
+      	parts.push(data);
+        size += data.byteLength;
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
     		console.log("time to fetch all data: " + (now-start) + " ms");
-      		console.log("total buffers: " + parts.length);
+      		console.log("total buffers: " + parts.length + " , total size: " + (size/1000000) + " mb");
       		//initSound(parts);
           var blob = new Blob(parts);
           fileReader.readAsArrayBuffer(blob);
@@ -52,19 +55,27 @@
 
   function initSound(arrayBuffer) {
   	context.decodeAudioData(arrayBuffer, function(buffer) {
-  // audioBuffer is global to reuse the decoded audio later.
   		audioBuffer = buffer;
+      var buttons = document.querySelectorAll('button');
+      buttons[0].disabled = false;
+      buttons[1].disabled = false;
       playSound();
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
   }
+  function stopSound() {
+    if (source) {
+      source.noteOff(0);
+    }
+  }
   function playSound() {
-  	source = context.createBufferSource();
-		source.buffer = audioBuffer;
-		source.loop = false;
-		source.connect(context.destination);
-		source.noteOn(0);
+    stopSound();
+    source = context.createBufferSource();
+    source.buffer = audioBuffer;
+    source.loop = false;
+    source.connect(context.destination);
+    source.noteOn(0); // Play immediately.
   }
   </script>
 </body>
