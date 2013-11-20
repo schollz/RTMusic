@@ -13,6 +13,7 @@ var app = require('http').createServer(handler)
 var BinaryServer = require('binaryjs').BinaryServer;
 var fs = require('fs');
 
+
 app.listen(9000);
 
 // Start Binary.js server

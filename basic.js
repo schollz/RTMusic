@@ -19,16 +19,16 @@ function handler (req, res) {
   });
 }
 
-var udp = dgram.createSocket("udp4", function(){
-  console.log('message');
-});
+// var udp = dgram.createSocket("udp4", function(){
+//   console.log('dgram');
+// });
 
-var message = new Buffer("Some bytes");
-setInterval(function(){
-  udp.send(message, 0, message.length, 41234, "localhost", function(err, bytes) {
-    console.log(bytes);
-  });
-}, 5000);
+// var message = new Buffer("Some bytes");
+// setInterval(function(){
+//   udp.send(message, 0, message.length, 41234, "localhost", function(err, bytes) {
+//     console.log(bytes);
+//   });
+// }, 5000);
 
 io.sockets.on('connection', function (socket) {
   socket.on('init', function (data) {
