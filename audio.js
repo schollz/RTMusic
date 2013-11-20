@@ -1,5 +1,5 @@
 function handler (req, res) {
-  fs.readFile(__dirname + '/img.html',
+  fs.readFile(__dirname + '/audio.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
@@ -9,7 +9,7 @@ function handler (req, res) {
     res.end(data);
   });
 }
-var app = require('http').createServer(handler)
+var app = require('http').createServer(handler);
 var BinaryServer = require('binaryjs').BinaryServer;
 var fs = require('fs');
 
@@ -23,6 +23,7 @@ bs.on('connection', function(client){
   // Stream a flower as a hello!
   client.on('stream', function(stream, meta){
     // broadcast to all other clients
+    console.log('client activity');
     for(var id in bs.clients){
       if(bs.clients.hasOwnProperty(id)){
         var otherClient = bs.clients[id];

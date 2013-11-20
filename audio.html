@@ -12,14 +12,15 @@
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
+  var parts = [];
+  var fileReader = new FileReader();
 	var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
 	client.on('stream', function(stream, meta){
 		var start = new Date().getTime();
 		var laststep = new Date().getTime();
-    	var parts = [];
-    	var test = new MediaSource();
-    	var audio = document.createElement("audio");
-    	audio.src = (window.URL || window.webkitURL).createObjectURL(test);
+    	// var test = new MediaSource();
+    	// var audio = document.createElement("audio");
+    	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
     	stream.on('data', function(data){
     		var now = new Date().getTime();
     		console.log("time since last buffer received: " + (now-laststep) + " ms");
@@ -31,7 +32,10 @@
     		var now = new Date().getTime();
     		console.log("time to fetch all data: " + (now-start) + " ms");
       		console.log("total buffers: " + parts.length);
-      		//initSound(new Blob(parts));
+      		//initSound(parts);
+          var blob = new Blob(parts);
+          fileReader.readAsArrayBuffer(blob);
+          console.log("past filereader");
     	});
 	});
 	var fileInput = document.querySelector('input[type="file"]');
@@ -40,22 +44,28 @@
         client.send(file);
     }, false);
 
-    function initSound(arrayBuffer) {
-    	context.decodeAudioData(arrayBuffer, function(buffer) {
-    // audioBuffer is global to reuse the decoded audio later.
-    		audioBuffer = buffer;
-    	}, function(e) {
-    		console.log('Error decoding file', e);
-  		});
-  		playSound();
-    }
-    function playSound() {
-    	source = context.createBufferSource();
-  		source.buffer = audioBuffer;
-  		source.loop = false;
-  		source.connect(context.destination);
-  		source.noteOn(0);
-    }
+  fileReader.onloadend =  function(e){
+    var sound = fileReader.result;
+    initSound(sound);
+    console.log("sound shoud be playing");
+  };
+
+  function initSound(arrayBuffer) {
+  	context.decodeAudioData(arrayBuffer, function(buffer) {
+  // audioBuffer is global to reuse the decoded audio later.
+  		audioBuffer = buffer;
+      playSound();
+  	}, function(e) {
+  		console.log('Error decoding file', e);
+		});
+  }
+  function playSound() {
+  	source = context.createBufferSource();
+		source.buffer = audioBuffer;
+		source.loop = false;
+		source.connect(context.destination);
+		source.noteOn(0);
+  }
   </script>
 </body>
 </html>
