@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <title>Binaryjs Image</title>
+  <script src="http://cdn.binaryjs.com/0/binary.js"></script>
+</head>
+<body style="background-size:cover">
+  <audio><audio>
+  <input type="file" id="fileinput" accept="image/*" capture="camera" />
+  <script>
+  var audio = document.createElement('audio');
+  var mediaSource = new MediaSource();
+  audio.src = window.URL.createObjectURL(mediaSource);
+
+  var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
+  client.on('stream', function(stream, meta){
+    var start = new Date().getTime();
+    var laststep = new Date().getTime();
+      var parts = [];
+      stream.on('data', function(data){
+        var now = new Date().getTime();
+        console.log("time since last buffer received: " + (now-laststep));
+        laststep = new Date().getTime();
+          parts.push(data);
+      });
+      stream.on('end', function(){
+        var now = new Date().getTime();
+        console.log("time to fetch all data: " + (now-start));
+          var img = document.createElement("img");
+        img.src = (window.URL || window.webkitURL).createObjectURL(new Blob(parts));
+          document.body.appendChild(img);
+      });
+  });
+  var fileInput = document.querySelector('input[type="file"]');
+  fileInput.addEventListener('change', function(event){
+        var file = event.target.files[0];
+        client.send(file);
+    }, false);
+  </script>
+</body>
+</html>

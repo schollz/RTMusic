@@ -4,10 +4,13 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <title>Binaryjs Image</title>
+  <script src="http://localhost:5000/socket.io/socket.io.js"></script>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
+  <button onclick="emitPlay()" >Start</button>
+  <button onclick="emitStop()" >Stop</button>
 	<script>
 	var context = new window.webkitAudioContext();
 	var source = null;
@@ -64,8 +67,51 @@
 		source.buffer = audioBuffer;
 		source.loop = false;
 		source.connect(context.destination);
-		source.noteOn(0);
+		// source.noteOn(0);
+
   }
+
+function stopLocal() {
+  if (source) {
+    source.noteOff(0);
+  }
+}
+
+function playLocal() {
+  if (source) {
+    source.noteOff(0);
+  }
+  source = context.createBufferSource();
+  source.buffer = audioBuffer;
+  source.loop = false;
+  source.connect(context.destination);
+  source.noteOn(0); // Play immediately.
+}
+
+
+var socket = io.connect('http://localhost:5000');
+socket.on('play', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    playLocal();
+  // }
+});
+socket.on('pause', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    stopLocal();
+  // }
+});
+
+
+function emitPlay(){
+  socket.emit('play', 'yes');
+}
+
+function emitStop(){
+  socket.emit('pause', 'yes');
+}
+
   </script>
 </body>
 </html>
