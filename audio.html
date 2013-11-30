@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="socket.io/socket.io.js"></script>
   <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
 </head>
@@ -18,7 +18,8 @@
 	var audioBuffer = null;
   var parts = [];
   var fileReader = new FileReader();
-	var client = new BinaryClient('ws://binary-endpoint');
+  var binaryHost = location.origin.replace(/^http/, 'ws');
+	var client = new BinaryClient(binaryHost + '/binary-endpoint');
 	client.on('stream', function(stream, meta){
     var begin = new Date();
 		var start = begin.getTime();
