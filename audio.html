@@ -20,7 +20,8 @@
   var fileReader = new FileReader();
 	var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
 	client.on('stream', function(stream, meta){
-		var start = new Date().getTime();
+    var begin = new Date();
+		var start = begin.getTime();
 		var laststep = new Date().getTime();
     	// var test = new MediaSource();
     	// var audio = document.createElement("audio");
@@ -41,12 +42,15 @@
           var blob = new Blob(parts);
           fileReader.readAsArrayBuffer(blob);
           console.log("past filereader");
+          console.log("first data recieved at " + begin + ' miliseconds ' + begin.getMilliseconds());
     	});
 	});
 	var fileInput = document.querySelector('input[type="file"]');
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
         client.send(file);
+        var now = new Date();
+        console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -76,7 +80,7 @@
 		source.buffer = audioBuffer;
 		source.loop = false;
 		source.connect(context.destination);
-		// source.noteOn(0);
+		source.noteOn(0);
 
   }
 
@@ -102,12 +106,14 @@ var socket = io.connect('http://localhost:5000');
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
+    console.log('playing');
     playLocal();
   // }
 });
 socket.on('pause', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
+    console.log('stopping');
     stopLocal();
   // }
 });
