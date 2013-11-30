@@ -19,6 +19,7 @@
   var parts = [];
   var fileReader = new FileReader();
 	var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
+  console.log(location.)
 	client.on('stream', function(stream, meta){
 		var start = new Date().getTime();
 		var laststep = new Date().getTime();
