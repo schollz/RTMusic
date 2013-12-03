@@ -11,7 +11,7 @@ function handler (req, res) {
 }
 
 var app = require('http').createServer(handler);
-var fs = require('fs');
+// var fs = require('fs');
 
 // var BinaryServer = require('binaryjs').BinaryServer;
 
