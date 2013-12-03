@@ -18,7 +18,7 @@ var BinaryServer = require('binaryjs').BinaryServer;
 var port = process.env.PORT || 5000;
 app.listen(port);
 // var io = require('socket.io').listen(port);
-
+console.log("server is good to go");
 
 
 var bs = new BinaryServer({server: app, path: '/binary-endpoint'});
