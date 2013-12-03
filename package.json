@@ -10,6 +10,7 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    "express" : ">=0.1"
+    "socket.io" : ">=0.0.3",
+    "binary" : ">=0.0.1"
   }
 }
