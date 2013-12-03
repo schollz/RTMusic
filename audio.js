@@ -15,9 +15,9 @@ var fs = require('fs');
 
 var BinaryServer = require('binaryjs').BinaryServer;
 
-
-app.listen(9000);
-var io = require('socket.io').listen(5000);
+var port = process.env.PORT || 5000;
+app.listen(port);
+var io = require('socket.io').listen(port);
 
 
 
