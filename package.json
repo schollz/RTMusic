@@ -10,8 +10,6 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    // "socket.io": "0.9.16",
-    // "binary" : "0.3.0",
     "ws" : "0.4.x"
   }
 }
