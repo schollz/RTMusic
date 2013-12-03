@@ -17,7 +17,7 @@ var BinaryServer = require('binaryjs').BinaryServer;
 
 var port = process.env.PORT || 5000;
 app.listen(port);
-var io = require('socket.io').listen(port);
+// var io = require('socket.io').listen(port);
 
 
 
@@ -41,11 +41,11 @@ bs.on('connection', function(client){
   });
 });
 
-io.sockets.on('connection', function (socket) {
-  socket.on('play', function (data) {
-    io.sockets.emit('play', data);
-  });
-  socket.on('pause', function (data) {
-    io.sockets.emit('pause', data);
-  });
-});
+// io.sockets.on('connection', function (socket) {
+//   socket.on('play', function (data) {
+//     io.sockets.emit('play', data);
+//   });
+//   socket.on('pause', function (data) {
+//     io.sockets.emit('pause', data);
+//   });
+// });

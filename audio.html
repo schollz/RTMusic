@@ -103,21 +103,21 @@ function playLocal() {
 }
 
 
-var socket = io.connect('http://localhost:5000');
-socket.on('play', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    console.log('playing');
-    playLocal();
-  // }
-});
-socket.on('pause', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    console.log('stopping');
-    stopLocal();
-  // }
-});
+// var socket = io.connect('http://localhost:5000');
+// socket.on('play', function (data) {
+//   // var text = document.getElementById('text').value;
+//   // if (data != text) {
+//     console.log('playing');
+//     playLocal();
+//   // }
+// });
+// socket.on('pause', function (data) {
+//   // var text = document.getElementById('text').value;
+//   // if (data != text) {
+//     console.log('stopping');
+//     stopLocal();
+//   // }
+// });
 
 
 function emitPlay(){
