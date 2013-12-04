@@ -29,6 +29,7 @@
 	client.on('stream', function(stream, meta){
     var begin = new Date();
 		var start = begin.getTime();
+    var laststep = new Date().getTime();
     	// var test = new MediaSource();
     	// var audio = document.createElement("audio");
     	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
@@ -39,7 +40,7 @@
     	stream.on('data', function(data){
     		var now = new Date().getTime();
     		console.log("time since last buffer received: " + (now-laststep) + " ms");
-    		var laststep = new Date().getTime();
+    		laststep = new Date().getTime();
       	parts.push(data);
         size += data.byteLength;
     	});
