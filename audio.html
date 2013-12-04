@@ -20,6 +20,12 @@
   var fileReader = new FileReader();
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
+
+  var socket = io.connect('http://socket-logs.herokuapp.com');
+  socket.on('init', function (data){
+    console.log(data);
+  });
+
 	client.on('stream', function(stream, meta){
     var begin = new Date();
 		var start = begin.getTime();
@@ -107,11 +113,6 @@ function playLocal() {
   source.noteOn(0); // Play immediately.
 }
 
-
-var socket = io.connect('http://socket-logs.herokuapp.com');
-socket.on('init', function (data){
-  console.log(data);
-})
 
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
