@@ -22,6 +22,14 @@
     <h1>Master</h1>
   </div>
 	<script>
+  var minutes=1000*60;
+  var hours=minutes*60;
+  var days=hours*24;
+  var years=days*365;
+  var seconds = minutes * 60;
+  var miliseconds = seconds * 1000;
+
+
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
@@ -147,7 +155,11 @@ socket.on('slaveStartStreamTime', function (data){
 
 
 socket.on('masterTime', function (data){
-  var p = '<p>' + data + '</p>';
+
+  var h = Math.round(data/hours);
+  var s = Math.round(data/seconds);
+  var m = Math.round(data/miliseconds);
+  var p = '<p>' + h + ':' + s + ':<strong>' + m + '</strong></p>';
   $('#masterTime').append(p);
 });
 
