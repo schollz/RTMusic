@@ -12,13 +12,13 @@
 	<input type="file" id="fileinput" accept="audio/*" />
   <button onclick="emitPlay()" >Start</button>
   <button onclick="emitStop()" >Stop</button>
-  <div id="slaveTimes">
+  <div id="slaveTime">
     <h1>Slaves</h1>
   </div>  
-  <div id="serverTimes">
+  <div id="serverTime">
     <h1>Server</h1>
   </div>
-  <div id="masterTimes">
+  <div id="masterTime">
     <h1>Master</h1>
   </div>
 	<script>
@@ -142,11 +142,11 @@ socket.on('pause', function (data) {
 
 socket.on('slaveStartStreamTime', function (data){
   var p = '<p>' + data + '</p>';
-  $('#slaveTimes').append(p);
+  $('#slaveTime').append(p);
 });
 
 
-socket.on('masterTimes', function (data){
+socket.on('masterTime', function (data){
   var p = '<p>' + data + '</p>';
   $('#masterTime').append(p);
 });
