@@ -9,8 +9,8 @@
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
-  <button onclick="playSound()" >Start</button>
-  <button onclick="stopSound()" >Stop</button>
+  <button onclick="emitPlay()" >Start</button>
+  <button onclick="emitStop()" >Stop</button>
 
 	<script>
 	var context = new window.webkitAudioContext();
@@ -103,30 +103,34 @@ function playLocal() {
 }
 
 
-// var socket = io.connect('http://localhost:5000');
-// socket.on('play', function (data) {
-//   // var text = document.getElementById('text').value;
-//   // if (data != text) {
-//     console.log('playing');
-//     playLocal();
-//   // }
-// });
-// socket.on('pause', function (data) {
-//   // var text = document.getElementById('text').value;
-//   // if (data != text) {
-//     console.log('stopping');
-//     stopLocal();
-//   // }
-// });
+var socket = io.connect('http://socket-logs.herokuapp.com');
+socket.on('init', function (data){
+  console.log(data);
+})
+
+socket.on('play', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    console.log('playing');
+    playLocal();
+  // }
+});
+socket.on('pause', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    console.log('stopping');
+    stopLocal();
+  // }
+});
 
 
-// function emitPlay(){
-//   socket.emit('play', 'yes');
-// }
+function emitPlay(){
+  socket.emit('play', 'yes');
+}
 
-// function emitStop(){
-//   socket.emit('pause', 'yes');
-// }
+function emitStop(){
+  socket.emit('pause', 'yes');
+}
 
   </script>
 </body>
