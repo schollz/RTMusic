@@ -12,7 +12,14 @@
 	<input type="file" id="fileinput" accept="audio/*" />
   <button onclick="emitPlay()" >Start</button>
   <button onclick="emitStop()" >Stop</button>
-  <div id="times">
+  <div id="slaveTimes">
+    <h1>Slaves</h1>
+  </div>  
+  <div id="serverTimes">
+    <h1>Server</h1>
+  </div>
+  <div id="MasterTimes">
+    <h1>Master</h1>
   </div>
 	<script>
 	var context = new window.webkitAudioContext();
@@ -65,6 +72,7 @@
         var file = event.target.files[0];
         client.send(file);
         var now = new Date();
+        socket.emit('masterSend', now.getTime());
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
@@ -134,7 +142,13 @@ socket.on('pause', function (data) {
 
 socket.on('slaveStartStreamTime', function (data){
   var p = '<p>' + data + '</p>';
-  $('#times').append(p);
+  $('#slaveTimes').append(p);
+});
+
+
+socket.on('masterTime', function (data){
+  var p = '<p>' + data + '</p>';
+  $('#masterTime').append(p);
 });
 
 
