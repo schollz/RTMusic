@@ -23,15 +23,17 @@
 	client.on('stream', function(stream, meta){
     var begin = new Date();
 		var start = begin.getTime();
-		var laststep = new Date().getTime();
     	// var test = new MediaSource();
     	// var audio = document.createElement("audio");
     	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
+
+    socket.emit('slaveStartStreamSend', start);
+
       var size = 0;
     	stream.on('data', function(data){
     		var now = new Date().getTime();
     		console.log("time since last buffer received: " + (now-laststep) + " ms");
-    		laststep = new Date().getTime();
+    		var laststep = new Date().getTime();
       	parts.push(data);
         size += data.byteLength;
     	});
@@ -44,6 +46,9 @@
           fileReader.readAsArrayBuffer(blob);
           console.log("past filereader");
           console.log("first data recieved at " + begin + ' miliseconds ' + begin.getMilliseconds());
+
+
+
     	});
 	});
 	var fileInput = document.querySelector('input[type="file"]');
