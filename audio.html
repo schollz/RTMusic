@@ -6,12 +6,14 @@
   <script src="http://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
   <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
   <button onclick="emitPlay()" >Start</button>
   <button onclick="emitStop()" >Stop</button>
-
+  <div id="times">
+  </div>
 	<script>
 	var context = new window.webkitAudioContext();
 	var source = null;
@@ -128,6 +130,11 @@ socket.on('pause', function (data) {
     console.log('stopping');
     stopLocal();
   // }
+});
+
+socket.on('slaveStartStreamTime', function (data){
+  var p = '<p>' + data + '</p>';
+  $('#times').append(p);
 });
 
 
