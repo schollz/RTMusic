@@ -18,7 +18,7 @@
   <div id="serverTimes">
     <h1>Server</h1>
   </div>
-  <div id="MasterTimes">
+  <div id="masterTimes">
     <h1>Master</h1>
   </div>
 	<script>
@@ -146,7 +146,7 @@ socket.on('slaveStartStreamTime', function (data){
 });
 
 
-socket.on('masterTime', function (data){
+socket.on('masterTimes', function (data){
   var p = '<p>' + data + '</p>';
   $('#masterTime').append(p);
 });
