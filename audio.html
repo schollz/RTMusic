@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <!-- // <script src="socket.io/socket.io.js"></script> -->
+  <script src="http://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
   <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
-  <button onclick="emitPlay()" >Start</button>
-  <button onclick="emitStop()" >Stop</button>
+  <button onclick="playSound()" >Start</button>
+  <button onclick="stopSound()" >Stop</button>
 
 	<script>
 	var context = new window.webkitAudioContext();
