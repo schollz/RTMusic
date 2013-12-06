@@ -43,6 +43,7 @@
   var startTime = 0;
   var startOffset = 0;
   var isBufferReady = 1;
+  var shouldPlay = 1;
 
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
@@ -117,6 +118,7 @@
         var now = new Date();
         socket.emit('masterSend', now.getTime());
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
+        fileReader.readAsArrayBuffer(file);
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -141,20 +143,24 @@
 function stopLocal() {
   if (source) {
     source.noteOff(0);
+    startOffset += context.currentTime - startTime;
   }
+  shouldPlay = 0;
 }
 
 function playLocal() {
-  if (source) {
-    source.noteOff(0);
-    startOffset += context.currentTime - startTime;
+  if(shouldPlay){
+    if (source) {
+      source.noteOff(0);
+      startOffset += context.currentTime - startTime;
+    }
+    startTime = context.currentTime;
+    source = context.createBufferSource();
+    source.buffer = audioBuffer;
+    source.loop = false;
+    source.connect(context.destination);
+    source.start(0, startOffset);
   }
-  startTime = context.currentTime;
-  source = context.createBufferSource();
-  source.buffer = audioBuffer;
-  source.loop = false;
-  source.connect(context.destination);
-  source.start(0, startOffset);
 }
 
 
@@ -163,6 +169,7 @@ socket.on('play', function (data) {
   // if (data != text) {
     console.log('playing');
     playLocal();
+    shouldPlay = 1;
   // }
 });
 socket.on('pause', function (data) {
@@ -181,9 +188,9 @@ socket.on('slaveStartStreamTime', function (data){
 
 socket.on('masterTime', function (data){
 
-  var h = Math.round(data/hours);
-  var s = Math.round(data/seconds);
-  var m = Math.round(data/miliseconds);
+  var h = Math.round(data%hours);
+  var s = Math.round(data%seconds);
+  var m = Math.round(data%miliseconds);
   var p = '<p>' + h + ':' + s + ':<strong>' + m + '</strong></p>';
   $('#masterTime').append(p);
 });
@@ -191,6 +198,7 @@ socket.on('masterTime', function (data){
 
 function emitPlay(){
   socket.emit('play', 'yes');
+  shouldPlay = 1;
 }
 
 function emitStop(){
