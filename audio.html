@@ -3,17 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+  <script src="http://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
   <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 </head>
 <body style="background-size:cover">
 	<input type="file" id="fileinput" accept="audio/*" />
   <button onclick="emitPlay()" >Start</button>
   <button onclick="emitStop()" >Stop</button>
-
+  <div id="slaveTime">
+    <h1>Slaves</h1>
+  </div>  
+  <div id="serverTime">
+    <h1>Server</h1>
+  </div>
+  <div id="masterTime">
+    <h1>Master</h1>
+  </div>
 	<script>
-  console.log(location.origin);
+
+  var minutes=1000*60;
+  var hours=minutes*60;
+  var days=hours*24;
+  var years=days*365;
+  var seconds = minutes * 60;
+  var miliseconds = seconds * 1000;
+
+
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
@@ -27,10 +44,19 @@
   var startOffset = 0;
   var isBufferReady = 1;
 
-	var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
+
+  var binaryHost = location.origin.replace(/^http/, 'ws');
+	var client = new BinaryClient(binaryHost + '/binary-endpoint');
+
+  var socket = io.connect('http://socket-logs.herokuapp.com');
+  socket.on('init', function (data){
+    console.log(data);
+  });
+
 	client.on('stream', function(stream, meta){
-		var start = new Date().getTime();
-		var laststep = new Date().getTime();
+    var begin = new Date();
+		var start = begin.getTime();
+    var laststep = new Date().getTime();
     	// var test = new MediaSource();
     	// var audio = document.createElement("audio");
     	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
@@ -45,6 +71,8 @@
       streamData = [];
       startTime = 0;
       startOffset = 0;
+
+    socket.emit('slaveStartStreamSend', start);
 
       var size = 0;
 
@@ -66,8 +94,6 @@
           //var blob = new Blob(parts);
           //fileReader.readAsArrayBuffer(blob);
           console.log("past filereader");
-
-          //createStream();
     	});
 	});
 
@@ -88,6 +114,9 @@
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
         client.send(file);
+        var now = new Date();
+        socket.emit('masterSend', now.getTime());
+        console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -109,7 +138,6 @@
 		});
   }
 
-
 function stopLocal() {
   if (source) {
     source.noteOff(0);
@@ -130,18 +158,34 @@ function playLocal() {
 }
 
 
-var socket = io.connect('http://localhost:5000');
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
+    console.log('playing');
     playLocal();
   // }
 });
 socket.on('pause', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
+    console.log('stopping');
     stopLocal();
   // }
+});
+
+socket.on('slaveStartStreamTime', function (data){
+  var p = '<p>' + data + '</p>';
+  $('#slaveTime').append(p);
+});
+
+
+socket.on('masterTime', function (data){
+
+  var h = Math.round(data/hours);
+  var s = Math.round(data/seconds);
+  var m = Math.round(data/miliseconds);
+  var p = '<p>' + h + ':' + s + ':<strong>' + m + '</strong></p>';
+  $('#masterTime').append(p);
 });
 
 
