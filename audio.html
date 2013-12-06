@@ -144,8 +144,9 @@ function stopLocal() {
   if (source) {
     source.noteOff(0);
     startOffset += context.currentTime - startTime;
+    shouldPlay = 0;
+    startTime = context.currTime;
   }
-  shouldPlay = 0;
 }
 
 function playLocal() {
@@ -198,7 +199,7 @@ socket.on('masterTime', function (data){
 
 function emitPlay(){
   socket.emit('play', 'yes');
-  shouldPlay = 1;
+  // shouldPlay = 1;
 }
 
 function emitStop(){
