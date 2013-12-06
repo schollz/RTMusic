@@ -19,6 +19,12 @@
 	var audioBuffer = null;
   var parts = [];
   var fileReader = new FileReader();
+
+  //Stream source?
+  var streamingAudioSource = 0;
+  var streamData = [];
+
+
 	var client = new BinaryClient('ws://localhost:9000/binary-endpoint');
 	client.on('stream', function(stream, meta){
 		var start = new Date().getTime();
@@ -33,6 +39,8 @@
     		laststep = new Date().getTime();
       	parts.push(data);
         size += data.byteLength;
+        streamData.push(data);
+        //streamAudio();
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
@@ -42,8 +50,22 @@
           var blob = new Blob(parts);
           fileReader.readAsArrayBuffer(blob);
           console.log("past filereader");
+
+          //createStream();
     	});
 	});
+
+  function streamAudio(){
+    var blob = new Blob(parts);
+    fileReader.readAsArrayBuffer(streamData);
+
+  }
+
+  function createStream(){
+    //streamingAudioSource = context.createMediaStreamSource(streamData);
+
+  }
+
 	var fileInput = document.querySelector('input[type="file"]');
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
