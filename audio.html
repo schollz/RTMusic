@@ -43,7 +43,7 @@
   var startTime = 0;
   var startOffset = 0;
   var isBufferReady = 1;
-  var shouldPlay = 1;
+  var shouldPlay = 0;
 
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
@@ -78,7 +78,7 @@
       var size = 0;
 
     	stream.on('data', function(data){
-
+        shouldPlay = 1;
     		var now = new Date().getTime();
     		console.log("time since last buffer received: " + (now-laststep) + " ms");
     		laststep = new Date().getTime();
@@ -189,9 +189,9 @@ socket.on('slaveStartStreamTime', function (data){
 
 socket.on('masterTime', function (data){
 
-  var h = Math.round(data%hours);
-  var s = Math.round(data%seconds);
-  var m = Math.round(data%miliseconds);
+  var h = Math.round(data/hours);
+  var s = Math.round(data/seconds);
+  var m = Math.round(data/miliseconds);
   var p = '<p>' + h + ':' + s + ':<strong>' + m + '</strong></p>';
   $('#masterTime').append(p);
 });
