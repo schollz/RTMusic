@@ -8,20 +8,33 @@
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <link rel="stylesheet" href="/bootstrap.min.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body style="background-size:cover">
-	<input type="file" id="fileinput" accept="audio/*" />
-  <button onclick="emitPlay()" >Start</button>
-  <button onclick="emitStop()" >Stop</button>
-  <div id="slaveTime">
-    <h1>Slaves</h1>
-  </div>  
-  <div id="serverTime">
-    <h1>Server</h1>
+<div class="container">
+  <div class="row">
+  	<input type="file" id="fileinput" accept="audio/*" />
+    <button onclick="emitPlay()" >Start</button>
+    <button onclick="emitStop()" >Stop</button>
   </div>
-  <div id="masterTime">
-    <h1>Master</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <div id="slaveTime">
+        <h1>Slaves</h1>
+      </div>  
+    </div>
+    <div class="col-md-4">
+      <div id="serverTime">
+        <h1>Server</h1>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div id="masterTime">
+        <h1>Master</h1>
+      </div>
+    </div>
   </div>
+</div>
 	<script>
 
   var minutes=1000*60;

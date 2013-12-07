@@ -1,17 +1,24 @@
 function handler (req, res) {
-  fs.readFile(__dirname + '/audio.html',
+  
+  var path = url.parse(req.url).pathname;
+  if(path == '/'){
+    path = '/audio.html';
+  }
+  fs.readFile(__dirname + path,
   function (err, data) {
     if (err) {
       res.writeHead(500);
       return res.end('Error loading audio.html');
     }
     res.writeHead(200);
-    res.end(data);
+    res.write(data);
+    res.end();
   });
 }
 
 var app = require('http').createServer(handler);
 var fs = require('fs');
+var url = require('url');
 
 var BinaryServer = require('binaryjs').BinaryServer;
 
