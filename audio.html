@@ -171,6 +171,7 @@
 function stopLocal() {
   if (source) {
     source.noteOff(0);
+    console.log(context.currentTime);
     startOffset += context.currentTime - startTime;
     shouldPlay = 0;
     startTime = context.currTime;
