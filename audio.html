@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <script src="http://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
+  <script src="https://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
   <title>Binaryjs Audio</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -77,7 +77,7 @@
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
 
-  var socket = io.connect('http://socket-logs.herokuapp.com');
+  var socket = io.connect('https://socket-logs.herokuapp.com');
   socket.on('init', function (data){
     console.log(data);
   });
