@@ -144,6 +144,7 @@
 
   fileReader.onloadend =  function(e){
 
+    shouldPlay = 1;
     initSound(fileReader.result);
     console.log("sound shoud be playing");
 
