@@ -92,6 +92,7 @@
       streamData = [];
       startTime = 0;
       startOffset = 0;
+      sessionStorage.start = 0;
 
     socket.emit('slaveStartStreamSend', start);
 
@@ -165,6 +166,7 @@ function stopLocal() {
     source.noteOff(0);
     console.log(context.currentTime);
     startOffset += context.currentTime - startTime;
+    sessionStorage.start = context.currentTime;
     shouldPlay = 0;
     startTime = context.currTime;
   }
@@ -181,7 +183,7 @@ function playLocal() {
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
-    source.start(0, startOffset);
+    source.start(0, sessionStorage.start);
   }
 }
 
