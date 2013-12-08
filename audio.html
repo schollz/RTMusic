@@ -51,15 +51,7 @@
 
 
   <script>
-
-  var minutes=1000*60;
-  var hours=minutes*60;
-  var days=hours*24;
-  var years=days*365;
-  var seconds = minutes * 60;
-  var miliseconds = seconds * 1000;
-
-
+  
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
@@ -210,17 +202,24 @@ socket.on('pause', function (data) {
 });
 
 socket.on('slaveStartStreamTime', function (data){
-  var p = '<p>' + data + '</p>';
+  var time = new Date(data);
+  h = time.getHours();
+  m = time.getMinutes();
+  s = time.getSeconds();
+  ms = time.getMilliseconds();
+  var p = '<p>' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#slaveTime').append(p);
 });
 
 
 socket.on('masterTime', function (data){
 
-  var h = Math.round(data/hours);
-  var s = Math.round(data/seconds);
-  var m = Math.round(data/miliseconds);
-  var p = '<p>' + h + ':' + s + ':<strong>' + m + '</strong></p>';
+  var time = new Date(data);
+  h = time.getHours();
+  m = time.getMinutes();
+  s = time.getSeconds();
+  ms = time.getMilliseconds();
+  var p = '<p>' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#masterTime').append(p);
 });
 
