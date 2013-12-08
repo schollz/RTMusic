@@ -69,7 +69,7 @@
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
 
-  var socket = io.connect('https://socket-logs.herokuapp.com');
+  var socket = io.connect('https://socket-logs.herokuapp.com/');
   socket.on('init', function (data){
     console.log(data);
   });
@@ -94,7 +94,8 @@
       startOffset = 0;
       sessionStorage.start = 0;
 
-    socket.emit('slaveStartStreamSend', start);
+    socket.emit('slaveStartStreamSend', {"id" : socket.id, 
+                                        "time":start});
 
       var size = 0;
 
@@ -207,7 +208,7 @@ socket.on('pause', function (data) {
 });
 
 socket.on('slaveStartStreamTime', function (data){
-  var time = new Date(data);
+  var time = new Date(data.time);
   h = time.getHours();
   m = time.getMinutes();
   s = time.getSeconds();
