@@ -177,12 +177,14 @@ function playLocal() {
     if (source) {
       source.noteOff(0);
       startOffset += context.currentTime - startTime;
+      sessionStorage.start = context.currentTime;
     }
     startTime = context.currentTime;
     source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
+    console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);
   }
 }
