@@ -10,13 +10,20 @@
   <link rel="stylesheet" href="/bootstrap.min.css">
   <link rel="stylesheet" href="/style.css">
 </head>
-<body style="background-size:cover">
+<body>
+
+
+
 <div class="container">
+
   <div class="row">
+    <form role="form">
   	<input type="file" id="fileinput" accept="audio/*" />
     <button onclick="emitPlay()" >Start</button>
     <button onclick="emitStop()" >Stop</button>
   </div>
+
+
   <div class="row">
     <div class="col-md-4">
       <div id="slaveTime">
@@ -35,7 +42,15 @@
     </div>
   </div>
 </div>
-	<script>
+	
+
+
+
+
+
+
+
+  <script>
 
   var minutes=1000*60;
   var hours=minutes*60;
@@ -52,7 +67,6 @@
   var fileReader = new FileReader();
 
   //Stream source?
-  var streamingAudioSource = 0;
   var streamData = [];
   var startTime = 0;
   var startOffset = 0;
@@ -115,8 +129,8 @@
   function streamAudio(){
     if(isBufferReady){
       var blob = new Blob(streamData);
-      fileReader.readAsArrayBuffer(blob);
       isBufferReady = 0;
+      fileReader.readAsArrayBuffer(blob);
     }
   }
 
@@ -183,8 +197,8 @@ socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
     console.log('playing');
-    playLocal();
     shouldPlay = 1;
+    playLocal();
   // }
 });
 socket.on('pause', function (data) {
