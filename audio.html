@@ -273,9 +273,6 @@ function updateVelocities() {
   var isBufferReady = 1;
   var shouldPlay = 0;
 
-  var synching = 0;
-
-
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
 
@@ -293,7 +290,6 @@ function updateVelocities() {
       audioBuffer = null;
       streamData = [];
       sessionStorage.start = 0;
-      synching = 1;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
                                         "time":start.getTime()});
@@ -329,11 +325,12 @@ function updateVelocities() {
 	var fileInput = document.querySelector('input[type="file"]');
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
-        synching = 1;
-        fileReader.readAsArrayBuffer(file);
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
+        fileReader.readAsArrayBuffer(file);
+        socket.broadcast.emit('play', "this is a test");
+        playLocal();
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
@@ -364,11 +361,6 @@ function updateVelocities() {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
       //playLocal();
-      if (synching) {
-        console.log('ready');
-        socket.emit('clientReady', socket.id);
-        synching = 0;
-      }
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
@@ -401,7 +393,7 @@ function playLocal() {
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log('playing with #clients: ' + data);
+    console.log(data);
     shouldPlay = 1;
     playLocal();
   // }
@@ -411,14 +403,6 @@ socket.on('pause', function (data) {
   // if (data != text) {
     console.log('stopping');
     stopLocal();
-  // }
-});
-
-socket.on('initplay', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    $('#startbutton').removeAttr('disabled');
-    $('#stopbutton').removeAttr('disabled');
   // }
 });
 
