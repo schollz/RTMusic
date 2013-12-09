@@ -224,7 +224,6 @@ function updateVelocities() {
 
   //Stream source?
   var streamData = [];
-  var startTime = 0;
   var isBufferReady = 1;
   var shouldPlay = 0;
 
@@ -244,32 +243,24 @@ function updateVelocities() {
       }
       source = null;
       audioBuffer = null;
-      parts = [];
       streamData = [];
-      startTime = 0;
-      startOffset = 0;
       sessionStorage.start = 0;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
-                                        "time":start});
+                                        "time":start.getTime()});
 
       var size = 0;
 
     	stream.on('data', function(data){
         shouldPlay = 1;
-      	parts.push(data);
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
-    		console.log("time to fetch all data: " + (now-start) + " ms");
-      		console.log("total buffers: " + parts.length + " , total size: " + (size/1000000) + " mb");
-      		//initSound(parts);
-          //var blob = new Blob(parts);
-          //fileReader.readAsArrayBuffer(blob);
-          console.log("past filereader");
+    		console.log("time to fetch all data: " + (now-start.getTime()) + " ms");
+      	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
     	});
 	});
 
@@ -332,11 +323,8 @@ function updateVelocities() {
 function stopLocal() {
   if (source) {
     source.noteOff(0);
-    console.log(context.currentTime);
-    startOffset += context.currentTime - startTime;
     sessionStorage.start = context.currentTime;
     shouldPlay = 0;
-    startTime = context.currTime;
   }
 }
 
@@ -344,10 +332,8 @@ function playLocal() {
   if(shouldPlay){
     if (source) {
       source.noteOff(0);
-      startOffset += context.currentTime - startTime;
       sessionStorage.start = context.currentTime;
     }
-    startTime = context.currentTime;
     source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
