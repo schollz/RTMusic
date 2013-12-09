@@ -264,6 +264,7 @@ function updateVelocities() {
 
   $( document ).ready(function() {
     sessionStorage.start = 0;
+    audio = new Audio();
   });
  	var context = new window.webkitAudioContext();
 	var source = null;
@@ -366,10 +367,9 @@ function stopLocal() {
 function playLocal() {
   if (audio) {
     if (audio.source) {
-      audio.source.noteOff(0);
+      audio.source.disconnect();
     }
   }
-  audio = new Audio();
   audio.initAudio(audioBuffer);
   if(shouldPlay){
     /*source = context.createBufferSource();
