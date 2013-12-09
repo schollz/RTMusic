@@ -362,7 +362,7 @@ function updateVelocities() {
 
 function stopLocal() {
   if (audio.source) {
-    audio.source.stop();
+    audio.source.stop(0);
     sessionStorage.offset = context.currentTime - sessionStorage.start;
   }
 }
@@ -370,7 +370,7 @@ function stopLocal() {
 function playLocal() {
   if(shouldPlay){
     if (audio.source) {
-      audio.source.stop();
+      audio.source.stop(0);
     }
     sessionStorage.start = context.currentTime;
     /*source = context.createBufferSource();
