@@ -365,18 +365,18 @@ function stopLocal() {
 }
 
 function playLocal() {
-  if(shouldPlay){
-    if (audio.source) {
+  if (audio.source) {
       audio.source.noteOff(0);
-    }
+  }
+  audio = new Audio();
+  audio.initAudio(audioBuffer);
+  if(shouldPlay){
     /*source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
-    audio = new Audio();
-    audio.initAudio(audioBuffer);
     audio.source.start(0);//, sessionStorage.start);
   }
 }
