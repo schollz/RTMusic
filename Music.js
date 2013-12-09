@@ -50,7 +50,7 @@ Audio.prototype.loadAudioBuffer = function(url) {
   request.send();
 }
 
-Audio.prototype.initAudio = function(data) {
+Audio.prototype.initAudio = function(data, start) {
   this.source = this.audioContext.createBufferSource();
   if(this.audioContext.decodeAudioData) {
     this.audioContext.decodeAudioData(data, function(buffer) {
@@ -62,7 +62,7 @@ Audio.prototype.initAudio = function(data) {
     });
   } else {
     this.source.buffer = this.audioContext.createBuffer(data, false);
-    this.createAudio();
+    this.createAudio(start);
   }
 }
 
