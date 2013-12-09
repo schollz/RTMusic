@@ -266,15 +266,14 @@ function updateVelocities() {
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
-  var parts = [];
   var fileReader = new FileReader();
 
   //Stream source?
   var streamData = [];
-  var startTime = 0;
-  var startOffset = 0;
   var isBufferReady = 1;
   var shouldPlay = 0;
+
+  var synching = 0;
 
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
@@ -286,48 +285,31 @@ function updateVelocities() {
   });
 
 	client.on('stream', function(stream, meta){
-    var begin = new Date();
-		var start = begin.getTime();
-    var laststep = new Date().getTime();
-    	// var test = new MediaSource();
-    	// var audio = document.createElement("audio");
-    	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
-      
       // Reset Variables
       if(source){
         source.noteOff(0);
       }
       source = null;
       audioBuffer = null;
-      parts = [];
       streamData = [];
-      startTime = 0;
-      startOffset = 0;
       sessionStorage.start = 0;
+      synching = 1;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
-                                        "time":start});
+                                        "time":start.getTime()});
 
       var size = 0;
 
     	stream.on('data', function(data){
         shouldPlay = 1;
-    		var now = new Date().getTime();
-    		console.log("time since last buffer received: " + (now-laststep) + " ms");
-    		laststep = new Date().getTime();
-      	parts.push(data);
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
-    		console.log("time to fetch all data: " + (now-start) + " ms");
-      		console.log("total buffers: " + parts.length + " , total size: " + (size/1000000) + " mb");
-      		//initSound(parts);
-          //var blob = new Blob(parts);
-          //fileReader.readAsArrayBuffer(blob);
-          console.log("past filereader");
+    		console.log("time to fetch all data: " + (now-start.getTime()) + " ms");
+      	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
     	});
 	});
 
@@ -347,11 +329,12 @@ function updateVelocities() {
 	var fileInput = document.querySelector('input[type="file"]');
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
+        synching = 1;
+        fileReader.readAsArrayBuffer(file);
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
-        fileReader.readAsArrayBuffer(file);
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -365,22 +348,27 @@ function updateVelocities() {
 
 
 
-    audio = new Audio();
-    audio.initAudio(fileReader.result);
-
-    for (var i = 0; i < n; i++) {
+    //audio = new Audio();
+    //audio.initAudio(fileReader.result);
+    initSound(fileReader.result);
+    /*for (var i = 0; i < n; i++) {
     resetParticle(i);
     pl[i] = Math.floor(Math.random() * life);
     }
 
-  requestAnimationFrame(updateFrame);
+  requestAnimationFrame(updateFrame);*/
 
   };
 
   function initSound(buf) {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
-      playLocal();
+      //playLocal();
+      if (synching) {
+        console.log('ready');
+        socket.emit('clientReady', socket.id);
+        synching = 0;
+      }
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
@@ -389,11 +377,8 @@ function updateVelocities() {
 function stopLocal() {
   if (source) {
     source.noteOff(0);
-    console.log(context.currentTime);
-    startOffset += context.currentTime - startTime;
     sessionStorage.start = context.currentTime;
     shouldPlay = 0;
-    startTime = context.currTime;
   }
 }
 
@@ -401,10 +386,8 @@ function playLocal() {
   if(shouldPlay){
     if (source) {
       source.noteOff(0);
-      startOffset += context.currentTime - startTime;
       sessionStorage.start = context.currentTime;
     }
-    startTime = context.currentTime;
     source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
@@ -418,7 +401,7 @@ function playLocal() {
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log('playing');
+    console.log('playing with #clients: ' + data);
     shouldPlay = 1;
     playLocal();
   // }
@@ -428,6 +411,14 @@ socket.on('pause', function (data) {
   // if (data != text) {
     console.log('stopping');
     stopLocal();
+  // }
+});
+
+socket.on('initplay', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    $('#startbutton').removeAttr('disabled');
+    $('#stopbutton').removeAttr('disabled');
   // }
 });
 
