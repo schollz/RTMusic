@@ -262,8 +262,10 @@ function updateVelocities() {
 
 
 
-  
-	var context = new window.webkitAudioContext();
+  $( document ).ready(function() {
+    sessionStorage.start = 0;
+  });
+ 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
   var fileReader = new FileReader();
