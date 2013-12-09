@@ -369,8 +369,10 @@ function stopLocal() {
 
 function playLocal() {
   if(shouldPlay){
+    var offset = 0;
     if (audio.source) {
       audio.source.stop(0);
+      offset = sessionStorage.offset % audio.buffer.duration
     }
     sessionStorage.start = context.currentTime;
     /*source = context.createBufferSource();
@@ -380,7 +382,7 @@ function playLocal() {
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
     audio = new Audio();
-    audio.initAudio(fileReader.result, sessionStorage.offset % audio.buffer.duration);
+    audio.initAudio(fileReader.result, offset);
   }
 }
 
