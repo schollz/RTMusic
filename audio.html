@@ -128,6 +128,7 @@ var theta = 0;
 var velocity = 2;
 var radius = 8;
 var fft_resolution = 256;
+var audioLoaded = 0;
 
 function resetParticle(i) {
     var t = i / n;
@@ -151,7 +152,7 @@ function updateFrame() {
   
   requestAnimationFrame(updateFrame);
 
-  if (!audio.playing) return;
+  if (!audioLoaded) return;
 
   var end = new Date;
   time = end - initial;
@@ -351,6 +352,7 @@ function updateVelocities() {
   function initSound(buf) {
   	context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
+      audioLoaded = 1;
       audio = new Audio();
       audio.initAudio(audioBuffer);
   	}, function(e) {
