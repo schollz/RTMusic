@@ -39,10 +39,10 @@ bs.on('connection', function(client){
     for (var id in bs.clients) {
       if (bs.clients.hasOwnProperty(id)) {
         var otherClient = bs.clients[id];
-        if (otherClient != client) {
+        //if (otherClient != client) {
           var send = otherClient.createStream(meta);
           stream.pipe(send);
-        }
+        //}
       }
     }
   });
