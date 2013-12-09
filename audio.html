@@ -227,6 +227,8 @@ function updateVelocities() {
   var isBufferReady = 1;
   var shouldPlay = 0;
 
+  var synching = 0;
+
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -245,6 +247,7 @@ function updateVelocities() {
       audioBuffer = null;
       streamData = [];
       sessionStorage.start = 0;
+      synching = 1;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
                                         "time":start.getTime()});
@@ -256,6 +259,7 @@ function updateVelocities() {
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
+        if (synching) { synching = 0; }
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
@@ -284,6 +288,7 @@ function updateVelocities() {
         var now = new Date();
         socket.emit('masterSend', now.getTime());
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
+        synching = 1;
         fileReader.readAsArrayBuffer(file);
     }, false);
 
@@ -314,7 +319,10 @@ function updateVelocities() {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
       //playLocal();
-      socket.emit('clientReady', socket.id);
+      if (synching) {
+        socket.emit('clientReady', socket.id);
+        synching = 0;
+      }
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
