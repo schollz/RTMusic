@@ -368,7 +368,7 @@ function stopLocal() {
 function playLocal() {
   if(shouldPlay){
     if (source) {
-      sessionStorage.start = context.currentTime - sessionStorage.strart;
+      sessionStorage.start = context.currentTime - sessionStorage.start;
       source.noteOff(0);
     }
     source = context.createBufferSource();
