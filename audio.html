@@ -351,8 +351,8 @@ function updateVelocities() {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
       audio.initAudio(buffer);
+      playLocal();
     });
-    playLocal();
   }
 
 function stopLocal() {
