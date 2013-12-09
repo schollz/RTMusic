@@ -331,8 +331,8 @@ function updateVelocities() {
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
-        //shouldPlay = 0;
-        //fileReader.readAsArrayBuffer(file);
+        shouldPlay = 0;
+        fileReader.readAsArrayBuffer(file);
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
