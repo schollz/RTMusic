@@ -128,7 +128,6 @@ var theta = 0;
 var velocity = 2;
 var radius = 8;
 var fft_resolution = 256;
-var audioLoaded = 0;
 
 function resetParticle(i) {
     var t = i / n;
@@ -152,7 +151,7 @@ function updateFrame() {
   
   requestAnimationFrame(updateFrame);
 
-  if (!audioLoaded) return;
+  if (!audio.playing) return;
 
   var end = new Date;
   time = end - initial;
@@ -337,7 +336,7 @@ function updateVelocities() {
     }, false);
 
   fileReader.onloadend =  function(e){
-    console.log("sound shoud be playing");
+    //console.log("sound shoud be playing");
     initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
@@ -350,14 +349,11 @@ function updateVelocities() {
   };
 
   function initSound(buf) {
-  	context.decodeAudioData(buf, function(buffer) {
-      audioBuffer = buffer;
-      audioLoaded = 1;
-      audio = new Audio();
-      audio.initAudio(audioBuffer);
-  	}, function(e) {
+  	//context.decodeAudioData(buf, function(buffer) {
+      audioBuffer = buf;
+  	/*}, function(e) {
   		console.log('Error decoding file', e);
-		});
+		});*/
   }
 
 function stopLocal() {
