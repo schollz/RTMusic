@@ -330,70 +330,56 @@ function updateVelocities() {
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
+        shouldPlay = 1;
         fileReader.readAsArrayBuffer(file);
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
   fileReader.onloadend =  function(e){
-
-    shouldPlay = 1;
-    //initSound(fileReader.result);
     console.log("sound shoud be playing");
-
+    initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
 
-
-
-    audio = new Audio();
-    audio.initAudio(fileReader.result, sessionStorage.start);
-    context.decodeAudioData(fileReader.result, function(buffer) {
-      audioBuffer = buffer;
-      //playLocal();
-    }, function(e) {
-      console.log('Error decoding file', e);
-    });
-    //initSound(fileReader.result);
-    for (var i = 0; i < n; i++) {
+    //audio = new Audio();
+    //audio.initAudio(fileReader.result, sessionStorage.start);
+    /*for (var i = 0; i < n; i++) {
       resetParticle(i);
       pl[i] = Math.floor(Math.random() * life);
     }
-
-  requestAnimationFrame(updateFrame);
-
+    requestAnimationFrame(updateFrame);*/
   };
 
   function initSound(buf) {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
-      //playLocal();
+      playLocal();
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
   }
 
 function stopLocal() {
-  if (audio.source) {
-    audio.source.noteOff(0);
+  if (source) {
+    source.noteOff(0);
     sessionStorage.start = context.currentTime;
-    shouldPlay = 0;
   }
 }
 
 function playLocal() {
   if(shouldPlay){
-    if (audio.source) {
-      audio.source.noteOff(0);
+    if (source) {
       sessionStorage.start = context.currentTime;
+      source.noteOff(0);
     }
-    /*source = context.createBufferSource();
+    source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
     console.log(sessionStorage.start);
-    source.start(0, sessionStorage.start);*/
-    audio = new Audio();
-    audio.initAudio(fileReader.result, sessionStorage.start);
+    source.start(0, sessionStorage.start);
+    /*audio = new Audio();
+    audio.initAudio(fileReader.result, sessionStorage.start);*/
   }
 }
 
@@ -408,7 +394,7 @@ socket.on('play', function (data) {
 socket.on('pause', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log('stopping');
+    shouldPlay = 0;
     stopLocal();
   // }
 });
