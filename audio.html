@@ -341,7 +341,7 @@ function updateVelocities() {
     // Get more blobs when finished:
     isBufferReady = 1;
     audio = new Audio();
-    audio.initAudio(fileReader.result);
+    audio.initAudio(audioBuffer);
     playLocal();
     for (var i = 0; i < n; i++) {
       resetParticle(i);
