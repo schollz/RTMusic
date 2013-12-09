@@ -22,8 +22,8 @@
 
   <div class="row">
   	<input type="file" id="fileinput" accept="audio/*" />
-    <button onclick="emitPlay()" >Start</button>
-    <button onclick="emitStop()" >Stop</button>
+    <button id="startbutton" onclick="emitPlay()" disabled>Start</button>
+    <button id="stopbuttin" onclick="emitStop()" disabled>Stop</button>
     <canvas id="canvas-fluid" width="600" height="400"></canvas>
   </div>
   
@@ -365,6 +365,14 @@ socket.on('pause', function (data) {
   // if (data != text) {
     console.log('stopping');
     stopLocal();
+  // }
+});
+
+socket.on('initplay', function (data) {
+  // var text = document.getElementById('text').value;
+  // if (data != text) {
+    $('#startbutton').removeAttr('disabled');
+    $('#stopbutton').removeAttr('disabled');
   // }
 });
 
