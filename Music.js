@@ -76,5 +76,5 @@ Audio.prototype.createAudio = function(start) {
   this.source.loop = true;
   this.source.start(0, start);
   this.playing = true;
-  message("OK");
+  //message("OK");
 }
