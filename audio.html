@@ -4,15 +4,16 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <script src="https://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
-  <title>Binaryjs Audio</title>
+  <title>RTMusic</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="FluidField.js"></script>
   <script src="FluidDisplay.js"></script>
   <script src="Music.js"></script>
   <script src="BeatDetector.js"></script>
-  <link rel="stylesheet" href="/bootstrap.min.css">
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/darkstrap.css">
+  <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
 
@@ -20,32 +21,77 @@
 
 <div class="container">
 
-  <div class="row">
-  	<input type="file" id="fileinput" accept="audio/*" />
-    <button onclick="emitPlay()" >Start</button>
-    <button onclick="emitStop()" >Stop</button>
-    <canvas id="canvas-fluid" width="600" height="400"></canvas>
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">RTMusic</a>
   </div>
-  
 
-  <div class="row">
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <!--li><a href="#">Home</a></li>
+      <li><a href="#">Something Else</a></li-->
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Eric, Jasper, Sam</a></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+
+  <div class="row well">                 <!-- BEGIN ROW -->
+    <div class="col-md-4 sidebar">
+      <h4>Choose, Send, and Stream</h4>
+      <br>
+      <br>
+      <div>
+        <p class="left">Choose Your Audio!</p>
+      	<input type="file" id="fileinput" accept="audio/*" />
+      </div>
+      <br>
+      <div>
+        <p class="left">Controls</p>
+        <button onclick="emitPlay()" class="btn">Play</button>
+        <button onclick="emitStop()" class="btn">Stop</button>
+      </div>
+      <br>
+      <div>
+        <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> </p>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <canvas id="canvas-fluid" width="600" height="400"></canvas>
+    </div>
+  </div>                             <!-- END ROW -->
+  
+  <br>
+  <div><h3>Real Time Analytics</h3></div>
+
+  <div class="row">                    <!-- BEGIN ROW -->
     <div class="col-md-4">
       <div id="slaveTime">
-        <h1>Slaves</h1>
+        <h4>Slaves</h4>
       </div>  
     </div>
     <div class="col-md-4">
       <div id="serverTime">
-        <h1>Server</h1>
+        <h4>Server</h4>
       </div>
     </div>
     <div class="col-md-4">
       <div id="masterTime">
-        <h1>Master</h1>
+        <h4>Master</h4>
       </div>
     </div>
   </div>
-</div>
+</div>                                  <!-- END ROW -->
 	
 
 
