@@ -362,6 +362,7 @@ function stopLocal() {
   if (audio.source) {
     audio.source.noteOff(0);
     sessionStorage.start = context.currentTime;
+    audio.playing = false;
   }
 }
 
@@ -380,6 +381,7 @@ function playLocal() {
     audio = new Audio();
     audio.initAudio(audioBuffer);
     audio.source.start(0, sessionStorage.start);
+    audio.playing = true; 
   }
 }
 

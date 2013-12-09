@@ -75,6 +75,6 @@ Audio.prototype.createAudio = function() {
   this.processor.connect(this.audioContext.destination);
   this.source.loop = false;
   //this.source.start(0);
-  this.playing = true;
+  //this.playing = true;
   //message("OK");
 }
