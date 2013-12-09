@@ -339,7 +339,6 @@ function updateVelocities() {
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
     // Get more blobs when finished:
-    playLocal();
     isBufferReady = 1;
     for (var i = 0; i < n; i++) {
       resetParticle(i);
@@ -353,6 +352,7 @@ function updateVelocities() {
       audioBuffer = buffer;
       audio.initAudio(buffer);
     });
+    playLocal();
   }
 
 function stopLocal() {

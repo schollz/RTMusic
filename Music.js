@@ -51,11 +51,11 @@ Audio.prototype.loadAudioBuffer = function(url) {
 }
 
 Audio.prototype.initAudio = function(data) {
-  /*this.source = this.audioContext.createBufferSource();
-  if(this.audioContext.decodeAudioData) {
+  this.source = this.audioContext.createBufferSource();
+  /*if(this.audioContext.decodeAudioData) {
     this.audioContext.decodeAudioData(data, function(buffer) {*/
-      audio.source.buffer = data;
-      audio.createAudio();
+      this.source.buffer = data;
+      this.createAudio();
     /*}, function(e) {
       console.log(e);
       message("cannot decode mp3");
