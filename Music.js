@@ -66,7 +66,7 @@ Audio.prototype.initAudio = function(data) {
   }
 }
 
-Audio.prototype.createAudio = function() {
+Audio.prototype.createAudio = function(start) {
   this.processor = this.audioContext.createJavaScriptNode(2048 , 1 , 1 );
   this.analyser = this.audioContext.createAnalyser();
   this.source.connect(this.audioContext.destination);
@@ -74,7 +74,7 @@ Audio.prototype.createAudio = function() {
   this.analyser.connect(this.processor);
   this.processor.connect(this.audioContext.destination);
   this.source.loop = true;
-  this.source.start(0);
+  this.source.start(0, start);
   this.playing = true;
   message("OK");
 }

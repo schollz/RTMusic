@@ -220,13 +220,11 @@ function updateVelocities() {
 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
-  var parts = [];
   var fileReader = new FileReader();
 
   //Stream source?
   var streamData = [];
   var startTime = 0;
-  var startOffset = 0;
   var isBufferReady = 1;
   var shouldPlay = 0;
 
@@ -240,13 +238,6 @@ function updateVelocities() {
   });
 
 	client.on('stream', function(stream, meta){
-    var begin = new Date();
-		var start = begin.getTime();
-    var laststep = new Date().getTime();
-    	// var test = new MediaSource();
-    	// var audio = document.createElement("audio");
-    	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
-      
       // Reset Variables
       if(source){
         source.noteOff(0);
@@ -266,9 +257,6 @@ function updateVelocities() {
 
     	stream.on('data', function(data){
         shouldPlay = 1;
-    		var now = new Date().getTime();
-    		console.log("time since last buffer received: " + (now-laststep) + " ms");
-    		laststep = new Date().getTime();
       	parts.push(data);
         size += data.byteLength;
         streamData.push(data);
@@ -319,22 +307,23 @@ function updateVelocities() {
 
 
 
-    audio = new Audio();
-    audio.initAudio(fileReader.result);
-
-    for (var i = 0; i < n; i++) {
+    //audio = new Audio();
+    //audio.initAudio(fileReader.result);
+    initSound(fileReader.result);
+    /*for (var i = 0; i < n; i++) {
     resetParticle(i);
     pl[i] = Math.floor(Math.random() * life);
     }
 
-  requestAnimationFrame(updateFrame);
+  requestAnimationFrame(updateFrame);*/
 
   };
 
   function initSound(buf) {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
-      playLocal();
+      //playLocal();
+      socket.emit('clientReady', socket.id);
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
