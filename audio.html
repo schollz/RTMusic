@@ -349,7 +349,9 @@ function updateVelocities() {
   };
 
   function initSound(buf) {
-    audioBuffer = buf;
+    context.decodeAudioData(buf, function(buffer) {
+      audio.source.buffer = buffer;
+    });
   }
 
 function stopLocal() {
