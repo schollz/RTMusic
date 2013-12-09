@@ -264,6 +264,7 @@ function updateVelocities() {
 
   $( document ).ready(function() {
     sessionStorage.start = 0;
+    sessionStorage.offset = 0;
   });
  	var context = new window.webkitAudioContext();
 	var source = null;
@@ -292,6 +293,7 @@ function updateVelocities() {
       audioBuffer = null;
       streamData = [];
       sessionStorage.start = 0;
+      sessionStorage.offset = 0;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
                                         "time":start.getTime()});
@@ -359,26 +361,26 @@ function updateVelocities() {
   }
 
 function stopLocal() {
-  if (source) {
-    source.noteOff(0);
-    sessionStorage.start = context.currentTime - sessionStorage.start;
+  if (audio.source) {
+    audio.source.stop();
+    sessionStorage.offset = context.currentTime - sessionStorage.start;
   }
 }
 
 function playLocal() {
   if(shouldPlay){
-    if (source) {
-      sessionStorage.start = context.currentTime - sessionStorage.start;
-      source.noteOff(0);
+    if (audio.source) {
+      audio.source.stop();
     }
-    source = context.createBufferSource();
+    sessionStorage.start = context.currentTime;
+    /*source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
     console.log(sessionStorage.start);
-    source.start(0, sessionStorage.start);
-    /*audio = new Audio();
-    audio.initAudio(fileReader.result, sessionStorage.start);*/
+    source.start(0, sessionStorage.start);*/
+    audio = new Audio();
+    audio.initAudio(fileReader.result, sessionStorage.offset % audio.buffer.duration);
   }
 }
 
