@@ -259,7 +259,6 @@ function updateVelocities() {
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
-        if (synching) { synching = 0; }
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
@@ -355,7 +354,7 @@ function playLocal() {
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log('playing with ' + data);
+    console.log('playing with #cleints: ' + data);
     shouldPlay = 1;
     playLocal();
   // }
