@@ -329,7 +329,7 @@ function updateVelocities() {
         var now = new Date();
         socket.emit('masterSend', now.getTime());
         fileReader.readAsArrayBuffer(file);
-        socket.broadcast.emit('play', "this is a test");
+        emitPlay();
         playLocal();
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
@@ -393,7 +393,6 @@ function playLocal() {
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log(data);
     shouldPlay = 1;
     playLocal();
   // }
