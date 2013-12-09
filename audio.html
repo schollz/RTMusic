@@ -350,7 +350,7 @@ function updateVelocities() {
 
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
-      audio.source.buffer = buffer;
+      audioBuffer = buffer;
     });
   }
 
