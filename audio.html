@@ -337,7 +337,6 @@ function updateVelocities() {
     }, false);
 
   fileReader.onloadend =  function(e){
-    //console.log("sound shoud be playing");
     initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
@@ -350,11 +349,7 @@ function updateVelocities() {
   };
 
   function initSound(buf) {
-  	//context.decodeAudioData(buf, function(buffer) {
-      audioBuffer = buf;
-  	/*}, function(e) {
-  		console.log('Error decoding file', e);
-		});*/
+    audioBuffer = buf;
   }
 
 function stopLocal() {
@@ -372,30 +367,18 @@ function playLocal() {
   }
   audio.initAudio(audioBuffer);
   if(shouldPlay){
-    /*source = context.createBufferSource();
-    source.buffer = audioBuffer;
-    source.loop = false;
-    source.connect(context.destination);
-    console.log(sessionStorage.start);
-    source.start(0, sessionStorage.start);*/
-    audio.source.start(0);//, sessionStorage.start);
+    audio.source.start(0, sessionStorage.start);
   }
 }
 
 
 socket.on('play', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    shouldPlay = 1;
-    playLocal();
-  // }
+  shouldPlay = 1;
+  playLocal();
 });
 socket.on('pause', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    shouldPlay = 0;
-    stopLocal();
-  // }
+  shouldPlay = 0;
+  stopLocal();
 });
 
 socket.on('slaveStartStreamTime', function (data){
@@ -408,9 +391,7 @@ socket.on('slaveStartStreamTime', function (data){
   $('#slaveTime').append(p);
 });
 
-
 socket.on('masterTime', function (data){
-
   var time = new Date(data);
   h = time.getHours();
   m = time.getMinutes();
@@ -420,18 +401,14 @@ socket.on('masterTime', function (data){
   $('#masterTime').append(p);
 });
 
-
 function emitPlay(){
   socket.emit('play', 'yes');
-  // shouldPlay = 1;
 }
 
 function emitStop(){
   socket.emit('pause', 'yes');
 }
 
-  </script>
-
-
+</script>
 </body>
 </html>
