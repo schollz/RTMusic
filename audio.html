@@ -151,7 +151,7 @@ function updateFrame() {
   
   requestAnimationFrame(updateFrame);
 
-  //if (!audio.playing) return;
+  if (!audio.playing) return;
 
   var end = new Date;
   time = end - initial;
