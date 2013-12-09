@@ -338,6 +338,7 @@ function updateVelocities() {
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
+    // Get more blobs when finished:
     playLocal();
     isBufferReady = 1;
     for (var i = 0; i < n; i++) {
@@ -350,6 +351,7 @@ function updateVelocities() {
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
+      audio.initAudio(buffer);
     });
   }
 
@@ -365,7 +367,6 @@ function playLocal() {
     audio.source.disconnect();
   }
   audio.source.buffer = audioBuffer;
-  audio.createAudio();
   if(shouldPlay){
     audio.source.start(0);//, sessionStorage.start);
   }
