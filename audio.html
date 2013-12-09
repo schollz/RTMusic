@@ -337,11 +337,11 @@ function updateVelocities() {
 
   fileReader.onloadend =  function(e){
     console.log("sound shoud be playing");
-    //initSound(fileReader.result);
+    initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
-    audio = new Audio();
-    audio.initAudio(fileReader.result);
+    //audio = new Audio();
+    //audio.initAudio(fileReader.result);
     playLocal();
     for (var i = 0; i < n; i++) {
       resetParticle(i);
@@ -353,7 +353,6 @@ function updateVelocities() {
   function initSound(buf) {
   	context.decodeAudioData(buf, function(buffer) {
   		audioBuffer = buffer;
-      playLocal();
   	}, function(e) {
   		console.log('Error decoding file', e);
 		});
@@ -378,6 +377,8 @@ function playLocal() {
     source.connect(context.destination);
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
+    audio = new Audio();
+    audio.initAudio(audioBuffer);
     audio.source.start(0, sessionStorage.start);
   }
 }
