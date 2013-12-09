@@ -264,7 +264,6 @@ function updateVelocities() {
 
   $( document ).ready(function() {
     sessionStorage.start = 0;
-    sessionStorage.offset = 0;
   });
  	var context = new window.webkitAudioContext();
 	var source = null;
@@ -286,14 +285,13 @@ function updateVelocities() {
 
 	client.on('stream', function(stream, meta){
       // Reset Variables
-      if(source){
-        source.noteOff(0);
+      if(audio.source){
+        audio.source.noteOff(0);
       }
       source = null;
       audioBuffer = null;
       streamData = [];
       sessionStorage.start = 0;
-      sessionStorage.offset = 0;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
                                         "time":start.getTime()});
@@ -343,7 +341,8 @@ function updateVelocities() {
     // Get more blobs when finished:
     isBufferReady = 1;
     audio = new Audio();
-    audio.initAudio(fileReader.result, sessionStorage.start);
+    audio.initAudio(fileReader.result);
+    playLocal();
     for (var i = 0; i < n; i++) {
       resetParticle(i);
       pl[i] = Math.floor(Math.random() * life);
@@ -363,16 +362,14 @@ function updateVelocities() {
 function stopLocal() {
   if (audio.source) {
     audio.source.noteOff(0);
-    sessionStorage.offset = context.currentTime - sessionStorage.start;
+    sessionStorage.start = context.currentTime;
   }
 }
 
 function playLocal() {
   if(shouldPlay){
-    var offset = 0;
     if (audio.source) {
       audio.source.noteOff(0);
-      offset = sessionStorage.offset % audio.source.buffer.duration;
     }
     sessionStorage.start = context.currentTime;
     /*source = context.createBufferSource();
@@ -381,8 +378,7 @@ function playLocal() {
     source.connect(context.destination);
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
-    audio = new Audio();
-    audio.initAudio(fileReader.result, offset);
+    audio.source.start(0, sessionStorage.start);
   }
 }
 

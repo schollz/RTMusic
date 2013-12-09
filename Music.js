@@ -50,7 +50,7 @@ Audio.prototype.loadAudioBuffer = function(url) {
   request.send();
 }
 
-Audio.prototype.initAudio = function(data, start) {
+Audio.prototype.initAudio = function(data) {
   this.source = this.audioContext.createBufferSource();
   if(this.audioContext.decodeAudioData) {
     this.audioContext.decodeAudioData(data, function(buffer) {
@@ -66,15 +66,15 @@ Audio.prototype.initAudio = function(data, start) {
   }
 }
 
-Audio.prototype.createAudio = function(start) {
+Audio.prototype.createAudio = function() {
   this.processor = this.audioContext.createJavaScriptNode(2048 , 1 , 1 );
   this.analyser = this.audioContext.createAnalyser();
   this.source.connect(this.audioContext.destination);
   this.source.connect(this.analyser);
   this.analyser.connect(this.processor);
   this.processor.connect(this.audioContext.destination);
-  this.source.loop = true;
-  this.source.start(0, start);
+  this.source.loop = false;
+  //this.source.start(0);
   this.playing = true;
   //message("OK");
 }
