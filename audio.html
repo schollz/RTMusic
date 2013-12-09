@@ -340,8 +340,8 @@ function updateVelocities() {
     initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
-    //audio = new Audio();
-    //audio.initAudio(fileReader.result);
+    audio = new Audio();
+    audio.initAudio(fileReader.result);
     playLocal();
     for (var i = 0; i < n; i++) {
       resetParticle(i);
@@ -371,15 +371,12 @@ function playLocal() {
     if (audio.source) {
       audio.source.noteOff(0);
     }
-    sessionStorage.start = context.currentTime;
     /*source = context.createBufferSource();
     source.buffer = audioBuffer;
     source.loop = false;
     source.connect(context.destination);
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
-    audio = new Audio();
-    audio.initAudio(audioBuffer);
     audio.source.start(0, sessionStorage.start);
     audio.playing = true; 
   }
