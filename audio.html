@@ -377,7 +377,8 @@ function playLocal() {
     source.connect(context.destination);
     console.log(sessionStorage.start);
     source.start(0, sessionStorage.start);*/
-    audio.source.buffer = audioBuffer;
+    audio = new Audio();
+    audio.initAudio(fileReader.result);
     audio.source.start(0);//, sessionStorage.start);
   }
 }
