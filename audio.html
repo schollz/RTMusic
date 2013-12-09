@@ -17,7 +17,6 @@
 <div class="container">
 
   <div class="row">
-    <form role="form">
   	<input type="file" id="fileinput" accept="audio/*" />
     <button onclick="emitPlay()" >Start</button>
     <button onclick="emitStop()" >Stop</button>
@@ -232,12 +231,12 @@ socket.on('masterTime', function (data){
 
 
 function emitPlay(){
-  //socket.emit('play', 'yes');
+  socket.emit('play', 'yes');
   // shouldPlay = 1;
 }
 
 function emitStop(){
-  //socket.emit('pause', 'yes');
+  socket.emit('pause', 'yes');
 }
 
   </script>
