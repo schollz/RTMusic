@@ -372,7 +372,7 @@ function playLocal() {
     var offset = 0;
     if (audio.source) {
       audio.source.noteOff(0);
-      offset = sessionStorage.offset % audio.source.buffer.duration
+      offset = sessionStorage.offset % audio.source.buffer.duration;
     }
     sessionStorage.start = context.currentTime;
     /*source = context.createBufferSource();
