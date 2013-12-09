@@ -319,6 +319,7 @@ function updateVelocities() {
   		audioBuffer = buffer;
       //playLocal();
       if (synching) {
+        console.log('ready');
         socket.emit('clientReady', socket.id);
         synching = 0;
       }
@@ -354,7 +355,7 @@ function playLocal() {
 socket.on('play', function (data) {
   // var text = document.getElementById('text').value;
   // if (data != text) {
-    console.log('playing with #cleints: ' + data);
+    console.log('playing with #clients: ' + data);
     shouldPlay = 1;
     playLocal();
   // }
