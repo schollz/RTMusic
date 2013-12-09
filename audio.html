@@ -283,12 +283,12 @@ function updateVelocities() {
 	var fileInput = document.querySelector('input[type="file"]');
 	fileInput.addEventListener('change', function(event){
         var file = event.target.files[0];
+        synching = 1;
+        fileReader.readAsArrayBuffer(file);
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
-        synching = 1;
-        fileReader.readAsArrayBuffer(file);
     }, false);
 
   fileReader.onloadend =  function(e){
