@@ -330,7 +330,6 @@ function updateVelocities() {
         socket.emit('masterSend', now.getTime());
         fileReader.readAsArrayBuffer(file);
         emitPlay();
-        playLocal();
         console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
@@ -430,6 +429,7 @@ socket.on('masterTime', function (data){
 
 function emitPlay(){
   socket.emit('play', 'yes');
+  playLocal();
   // shouldPlay = 1;
 }
 
