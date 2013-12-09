@@ -365,8 +365,10 @@ function stopLocal() {
 }
 
 function playLocal() {
-  if (audio.source) {
+  if (audio) {
+    if (audio.source) {
       audio.source.noteOff(0);
+    }
   }
   audio = new Audio();
   audio.initAudio(audioBuffer);
