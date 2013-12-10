@@ -126,11 +126,8 @@
       sessionStorage.start = 0;
 
       var startTime = new Date();
-    socket.emit('slaveStartStreamSend', {"id" : socket.id, 
-                                        "time":startTime.getTime()});
-
+      socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
       var size = 0;
-
     	stream.on('data', function(data){
         shouldPlay = 1;
         size += data.byteLength;
@@ -198,13 +195,17 @@ function stopLocal() {
 }
 
 function playLocal() {
-  if (source) {
+  if (!source) {
     source.disconnect();
+    source = context.createBufferSource();
+    source.connect(context.destination);
+    source.loop = false;
+    source.buffer = audioBuffer;
   }
-  source = context.createBufferSource();
+  /*source = context.createBufferSource();
   source.connect(context.destination);
   source.loop = false;
-  source.buffer = audioBuffer;
+  source.buffer = audioBuffer;*/
   if(shouldPlay){
     source.start(0);//, sessionStorage.start);
   }
