@@ -8,5 +8,13 @@ input{
 }
 
 canvas{
-  background-color: black;
+  background-color: #202020;
+}
+
+.left{
+	text-align:left; 
+}
+
+.sidebar{
+
 }

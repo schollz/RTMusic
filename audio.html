@@ -4,15 +4,17 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <script src="https://socket-logs.herokuapp.com/socket.io/socket.io.js"></script>
-  <title>Binaryjs Audio</title>
+  <title>RTMusic</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script src="FluidField.js"></script>
   <script src="FluidDisplay.js"></script>
   <script src="Music.js"></script>
   <script src="BeatDetector.js"></script>
-  <link rel="stylesheet" href="/bootstrap.min.css">
-  <link rel="stylesheet" href="/style.css">
+  <script src="Visualizer.js"></script>
+  <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/darkstrap.css">
+  <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
 
@@ -20,216 +22,97 @@
 
 <div class="container">
 
-  <div class="row">
-  	<input type="file" id="fileinput" accept="audio/*" />
-    <button onclick="emitPlay()" >Start</button>
-    <button onclick="emitStop()" >Stop</button>
-    <canvas id="canvas-fluid" width="900" height="600"></canvas>
-  </div>
-  
 
-  <div class="row">
+<nav class="navbar navbar-default" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">RTMusic</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <!--li><a href="#">Home</a></li>
+      <li><a href="#">Something Else</a></li-->
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Eric, Jasper, Sam</a></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+
+  <div class="row well">                 <!-- BEGIN ROW -->
+    <div class="col-md-4 sidebar">
+      <h4>Choose, Send, and Stream</h4>
+      <br>
+      <br>
+      <div>
+        <p class="left">Choose Your Audio!</p>
+      	<input type="file" id="fileinput" accept="audio/*" />
+      </div>
+      <br>
+      <div>
+        <p class="left">Controls</p>
+        <button onclick="emitPlay()" class="btn">Play</button>
+        <button onclick="emitStop()" class="btn">Stop</button>
+      </div>
+      <br>
+      <div>
+        <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> </p>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <canvas id="canvas-fluid" width="600" height="400"></canvas>
+    </div>
+  </div>                             <!-- END ROW -->
+  
+  <br>
+  <div><h3>Real Time Analytics</h3></div>
+
+  <div class="row">                    <!-- BEGIN ROW -->
     <div class="col-md-4">
       <div id="slaveTime">
-        <h1>Slaves</h1>
+        <h4>Slaves</h4>
       </div>  
     </div>
     <div class="col-md-4">
       <div id="serverTime">
-        <h1>Server</h1>
+        <h4>Server</h4>
       </div>
     </div>
     <div class="col-md-4">
       <div id="masterTime">
-        <h1>Master</h1>
+        <h4>Master</h4>
       </div>
     </div>
   </div>
-</div>
+</div>                                  <!-- END ROW -->
 	
 
 
 
   <script>
 
-
-  var canvas = document.getElementById("canvas");
-var field = new FluidField(canvas);
-var display = new FluidDisplay(field);
-var audio = null; // initialize only if on chrome
-var detector = new BeatDetector();
-
-var start = new Date(); // reset after each fps calculation
-var initial = new Date(); // very beginning
-var frames = 0; // for fps calculation
-
-var time = 0; // time since very beginning
-var offset = 0;
-var interval = 5; 
-var running = false; 
-
-var n = 72000; // number of particles
-var life = 100; // lifetime of particles in frames
-var px = new Float32Array(n); // x coordinate of particles
-var py = new Float32Array(n); // y coordinate of particles
-var pc = new Float32Array(n); // color of particle (hue)
-var pl = new Int16Array(n);   // age of particle 
-
-var showVelocity = false;
-var showParticles = true;
-
-var theta = 0;
-var velocity = 2;
-var radius = 8;
-var fft_resolution = 256;
-
-function resetParticle(i) {
-    var t = i / n;
-    var r = radius + Math.random();
-    px[i] = field.width * 0.5 + r * Math.cos(t * 2 * Math.PI);
-    py[i] = field.height * 0.5 + r * Math.sin(t * 2 * Math.PI);
-    pc[i] = t + offset;
-    pc[i] -= Math.floor(pc[i]);
-    pl[i] = life; 
-}
-
-function pulse(tmin, tmax) {
-  for (var i = 0; i < n; i++) {
-    if (Math.random() < 0.5 && pc[i] < tmax && pc[i] > tmin) {
-      pl[i] = life - Math.floor(Math.random() * 15);
-    }
-  }
-}
-
-function updateFrame() { 
-  
-  requestAnimationFrame(updateFrame);
-
-  if (!audio.playing) return;
-
-  var end = new Date;
-  time = end - initial;
-  offset = time * 0.0001;
-
-  frames++;
-  if (end - start > 500) {
-    
-    start = end;
-    frames = 0;
-  }
-
-  updateVelocities();
-  field.update();
-
-  for (var i = 0; i < n; i++) {
-    var jitter = (1 - pl[i] / life);
-    var vx = 10 * field.getXVelocity(px[i], py[i]);
-    var vy = 10 * field.getYVelocity(px[i], py[i]);
-    px[i] += vx + (Math.random() - 0.5) * jitter;
-    py[i] += vy + (Math.random() - 0.5) * jitter;
-    pl[i]--;
-    if (pl[i] < 1 || px[i] < 1 || px[i] > field.width || py[i] < 1 || py[i] > field.height - 1) {
-      resetParticle(i);
-    }
-  }
-  
-  display.clear();
-  
-  if (showParticles)
-    display.renderParticles(field, px, py, pc, pl);
-  
-  if (showVelocity)
-    display.renderVelocityField(field);
-
-}
-
-function updateVelocities() {
-
-  detector.sample(audio.analyser);
-
-  // big beats
-  if (detector.beatChance > 1.6) {
-    radius = 15;
-  } else {
-    radius = 8;
-  }
-
-  // jets for bins that are above threshold
-  for (var i = 0; i < detector.historyBins; i++) {
-    var fraction = i / detector.historyBins;
-    fraction += offset;
-    fraction -= Math.floor(fraction);
-    var theta = fraction * Math.PI * 2;
-    var x = Math.floor(field.width / 2 + radius * Math.cos(theta));
-    var y = Math.floor(field.height / 2 + radius * Math.sin(theta));
-    if (detector.binChance[i] > 1.5) {
-      var v = detector.binChance[i];
-      if (v > 3) v = 3;
-      var vx = field.getXVelocity(x, y) + v * Math.cos(theta);
-      var vy = field.getYVelocity(x, y) + v * Math.sin(theta);
-      field.setVelocity(x, y, vx, vy);
-      if (3 < detector.binChance[i] && detector.binChance[i] < 50) {
-        var tmin = i / detector.historyBins - 0.01;
-        var tmax = tmin + 0.02;
-        pulse(tmin, tmax);
-      }
-    } 
-  }
-
-}
-
-// window.onload = function() {
-  
-//   audio = new Audio();
-  
-//   document.addEventListener('drop', function(evt) {   
-//     evt.stopPropagation();
-//     evt.preventDefault();
-//     if (audio.source) audio.source.disconnect(); // clean up previous mp3
-//     message("Loading User Audio...");
-//     var droppedFiles = evt.dataTransfer.files;
-//     var reader = new FileReader();
-//     reader.onload = function(fileEvent) {
-//       var data = fileEvent.target.result;
-//       audio.initAudio(data);
-//     };
-//     reader.readAsArrayBuffer(droppedFiles[0]);
-//   }, false);
-
-//   document.addEventListener('dragover', function(evt) {
-//     evt.stopPropagation();
-//     evt.preventDefault();
-//     return false;
-//   }, false);  
-
-//   for (var i = 0; i < n; i++) {
-//     resetParticle(i);
-//     pl[i] = Math.floor(Math.random() * life);
-//   }
-
-//   requestAnimationFrame(updateFrame);
-// }
-
-
-
-
-
-
-
-  
-	var context = new window.webkitAudioContext();
+  $( document ).ready(function() {
+    sessionStorage.start = 0;
+    audio = new Audio();
+  });
+ 	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
-  var parts = [];
   var fileReader = new FileReader();
 
   //Stream source?
   var streamData = [];
-  var startTime = 0;
-  var startOffset = 0;
   var isBufferReady = 1;
   var shouldPlay = 0;
-
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -240,48 +123,30 @@ function updateVelocities() {
   });
 
 	client.on('stream', function(stream, meta){
-    var begin = new Date();
-		var start = begin.getTime();
-    var laststep = new Date().getTime();
-    	// var test = new MediaSource();
-    	// var audio = document.createElement("audio");
-    	// audio.src = (window.URL || window.webkitURL).createObjectURL(test);
-      
       // Reset Variables
-      if(source){
-        source.noteOff(0);
+      if(audio.source){
+        audio.source.disconnect();
       }
       source = null;
       audioBuffer = null;
-      parts = [];
       streamData = [];
-      startTime = 0;
-      startOffset = 0;
       sessionStorage.start = 0;
 
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
-                                        "time":start});
+                                        "time":start.getTime()});
 
       var size = 0;
 
     	stream.on('data', function(data){
         shouldPlay = 1;
-    		var now = new Date().getTime();
-    		console.log("time since last buffer received: " + (now-laststep) + " ms");
-    		laststep = new Date().getTime();
-      	parts.push(data);
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
     	});
     	stream.on('end', function(){
     		var now = new Date().getTime();
-    		console.log("time to fetch all data: " + (now-start) + " ms");
-      		console.log("total buffers: " + parts.length + " , total size: " + (size/1000000) + " mb");
-      		//initSound(parts);
-          //var blob = new Blob(parts);
-          //fileReader.readAsArrayBuffer(blob);
-          console.log("past filereader");
+    		console.log("time to fetch all data: " + (now-start.getTime()) + " ms");
+      	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
     	});
 	});
 
@@ -304,85 +169,55 @@ function updateVelocities() {
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
-        console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
+        shouldPlay = 0;
         fileReader.readAsArrayBuffer(file);
+        console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
   fileReader.onloadend =  function(e){
-
-    shouldPlay = 1;
-    //initSound(fileReader.result);
-    console.log("sound shoud be playing");
-
+    initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
-
-
-
-    audio = new Audio();
-    audio.initAudio(fileReader.result);
-
     for (var i = 0; i < n; i++) {
-    resetParticle(i);
-    pl[i] = Math.floor(Math.random() * life);
+      resetParticle(i);
+      pl[i] = Math.floor(Math.random() * life);
     }
-
-  requestAnimationFrame(updateFrame);
-
+    requestAnimationFrame(updateFrame);
   };
 
   function initSound(buf) {
-  	context.decodeAudioData(buf, function(buffer) {
-  		audioBuffer = buffer;
+    context.decodeAudioData(buf, function(buffer) {
+      audioBuffer = buffer;
+      audio.initAudio(buffer);
       playLocal();
-  	}, function(e) {
-  		console.log('Error decoding file', e);
-		});
+    });
   }
 
 function stopLocal() {
-  if (source) {
-    source.noteOff(0);
-    console.log(context.currentTime);
-    startOffset += context.currentTime - startTime;
+  if (audio.source) {
+    audio.source.disconnect();
     sessionStorage.start = context.currentTime;
-    shouldPlay = 0;
-    startTime = context.currTime;
   }
 }
 
 function playLocal() {
+  if (audio.source) {
+    audio.source.disconnect();
+  }
+  audio.source.buffer = audioBuffer;
   if(shouldPlay){
-    if (source) {
-      source.noteOff(0);
-      startOffset += context.currentTime - startTime;
-      sessionStorage.start = context.currentTime;
-    }
-    startTime = context.currentTime;
-    source = context.createBufferSource();
-    source.buffer = audioBuffer;
-    source.loop = false;
-    source.connect(context.destination);
-    console.log(sessionStorage.start);
-    source.start(0, sessionStorage.start);
+    audio.source.start(0);//, sessionStorage.start);
   }
 }
 
 
 socket.on('play', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    console.log('playing');
-    shouldPlay = 1;
-    playLocal();
-  // }
+  shouldPlay = 1;
+  playLocal();
 });
 socket.on('pause', function (data) {
-  // var text = document.getElementById('text').value;
-  // if (data != text) {
-    console.log('stopping');
-    stopLocal();
-  // }
+  shouldPlay = 0;
+  stopLocal();
 });
 
 socket.on('slaveStartStreamTime', function (data){
@@ -395,9 +230,7 @@ socket.on('slaveStartStreamTime', function (data){
   $('#slaveTime').append(p);
 });
 
-
 socket.on('masterTime', function (data){
-
   var time = new Date(data);
   h = time.getHours();
   m = time.getMinutes();
@@ -407,18 +240,14 @@ socket.on('masterTime', function (data){
   $('#masterTime').append(p);
 });
 
-
 function emitPlay(){
   socket.emit('play', 'yes');
-  // shouldPlay = 1;
 }
 
 function emitStop(){
   socket.emit('pause', 'yes');
 }
 
-  </script>
-
-
+</script>
 </body>
 </html>

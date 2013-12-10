@@ -52,18 +52,18 @@ Audio.prototype.loadAudioBuffer = function(url) {
 
 Audio.prototype.initAudio = function(data) {
   this.source = this.audioContext.createBufferSource();
-  if(this.audioContext.decodeAudioData) {
-    this.audioContext.decodeAudioData(data, function(buffer) {
-      audio.source.buffer = buffer;
-      audio.createAudio();
-    }, function(e) {
+  /*if(this.audioContext.decodeAudioData) {
+    this.audioContext.decodeAudioData(data, function(buffer) {*/
+      this.source.buffer = data;
+      this.createAudio();
+    /*}, function(e) {
       console.log(e);
       message("cannot decode mp3");
     });
   } else {
     this.source.buffer = this.audioContext.createBuffer(data, false);
     this.createAudio();
-  }
+  }*/
 }
 
 Audio.prototype.createAudio = function() {
@@ -73,8 +73,8 @@ Audio.prototype.createAudio = function() {
   this.source.connect(this.analyser);
   this.analyser.connect(this.processor);
   this.processor.connect(this.audioContext.destination);
-  this.source.loop = true;
-  this.source.start(0);
+  this.source.loop = false;
+  //this.source.start(0);
   this.playing = true;
-  message("OK");
+  //message("OK");
 }
