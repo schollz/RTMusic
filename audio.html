@@ -196,6 +196,7 @@ function stopLocal() {
 }
 
 function playLocal() {
+  stopLocal();
   sessionStorage.start = context.currentTime;
   source = context.createBufferSource();
   // Connect graph
