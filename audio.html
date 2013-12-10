@@ -65,6 +65,8 @@
       </div>
       <br>
       <div>
+        <input type="range" min="0" max="100" step="1" value="75" onchange="volumeChange(this.value)">      </div>
+      <div>
         <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> </p>
       </div>
     </div>
@@ -98,6 +100,8 @@
   var startTime = 0;
   var offset = 0;
  	var context = new window.webkitAudioContext();
+  var gainNode = context.createGain();
+
 	var source = null;
 	var audioBuffer = null;
   var fileReader = new FileReader();
@@ -164,6 +168,7 @@
         socket.emit('masterSend', now.getTime());
         shouldPlay = 0;
         fileReader.readAsArrayBuffer(file);
+        source.noteOff(0);
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -208,13 +213,22 @@ function playLocal() {
   // Connect graph
   source.buffer = audioBuffer;
   source.loop = true;
-  source.connect(context.destination);
+  source.connect(gainNode);
+  gainNode.connect(context.destination);
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
     source.start(0, offset);
   }
 }
 
+function volumeChange(value){
+  socket.emit('volume', value);
+  gainNode.gain.value = value;
+}
+
+socket.on('volume', function(data){
+  gainNode.gain.value = value;
+})
 
 socket.on('play', function (data) {
   shouldPlay = 1;
@@ -233,7 +247,8 @@ socket.on('sync', function (data){
   // Connect graph
   source.buffer = audioBuffer;
   source.loop = true;
-  source.connect(context.destination);
+  source.connect(gainNode);
+  gainNode.connect(context.destination);
   source.start(0);
 
 })
