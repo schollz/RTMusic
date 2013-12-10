@@ -1,7 +1,7 @@
 /* Visualizer init code */
 
 
-  var canvas = document.getElementById("canvas");
+  var canvas = document.getElementById("canvas-fluid");
 var field = new FluidField(canvas);
 var display = new FluidDisplay(field);
 //var audio = null; // initialize only if on chrome
