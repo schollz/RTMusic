@@ -94,12 +94,8 @@
 
   <script>
 
-  $( document ).ready(function() {
-    sessionStorage.start = 0;
-    sessionStorage.offset = 0;
-    sessionStorage.master = 0;
-    sessionStorage.msDiff = 0;
-  });
+  var startTime = 0;
+  var offset = 0;
  	var context = new window.webkitAudioContext();
 	var source = null;
 	var audioBuffer = null;
@@ -126,10 +122,8 @@
       source = null;
       audioBuffer = null;
       streamData = [];
-      sessionStorage.start = 0;
-      sessionStorage.offset = 0;
-      sessionStorage.master = 0;
-      sessionStorage.msDiff = 0;
+      startTime = 0;
+      offset = 0;
 
       var startTime = new Date();
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
@@ -194,17 +188,18 @@
 
 function stopLocal() {
   if (source) {
-    sessionStorage.offset += context.currentTime - sessionStorage.start;
+    offset += context.currentTime - startTime;
     source.noteOff(0);
   }
 }
 
 function playLocal() {
  if (source) {
-    sessionStorage.offset += context.currentTime - sessionStorage.start;
+    offset += context.currentTime - startTime;
     source.noteOff(0);
   }
-    sessionStorage.start = context.currentTime;
+
+  startTime = context.currentTime;
   source = context.createBufferSource();
   // Connect graph
   source.buffer = audioBuffer;
@@ -212,7 +207,7 @@ function playLocal() {
   source.connect(context.destination);
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
-    source.start(0, sessionStorage.offset);
+    source.start(0, offset);
   }
 }
 
