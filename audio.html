@@ -225,7 +225,7 @@ socket.on('pause', function (data) {
 });
 
 socket.on('sync', function (data){
-  startTime = 0;
+  startTime = context.currentTime;
   offset = 0;
    source.noteOff(0);
    source = context.createBufferSource();
