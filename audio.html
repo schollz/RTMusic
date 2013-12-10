@@ -117,8 +117,8 @@
 
 	client.on('stream', function(stream, meta){
       // Reset Variables
-      if(audio.source){
-        audio.source.disconnect();
+      if(source){
+        source.disconnect();
       }
       source = null;
       audioBuffer = null;
