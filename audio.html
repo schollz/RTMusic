@@ -97,6 +97,8 @@
   $( document ).ready(function() {
     sessionStorage.start = 0;
     sessionStorage.offset = 0;
+    sessionStorage.master = 0;
+    sessionStorage.msDiff = 0;
   });
  	var context = new window.webkitAudioContext();
 	var source = null;
@@ -126,6 +128,8 @@
       streamData = [];
       sessionStorage.start = 0;
       sessionStorage.offset = 0;
+      sessionStorage.master = 0;
+      sessionStorage.msDiff = 0;
 
       var startTime = new Date();
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
@@ -167,8 +171,8 @@
     }, false);
 
   fileReader.onloadend =  function(e){
-    $('.btn').removeAttr('disabled');
     initSound(fileReader.result);
+    $('.btn').removeAttr('disabled');
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
@@ -191,8 +195,8 @@
 
 function stopLocal() {
   if (source) {
-    source.stop(0);
     sessionStorage.offset = context.currentTime - sessionStorage.start;
+    source.noteOff(0);
   }
 }
 
@@ -227,6 +231,7 @@ socket.on('slaveStartStreamTime', function (data){
   ms = time.getMilliseconds();
   var p = '<p>Began playing at: ' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#slaveTime').append(p);
+  sessionStorage.msDiff = ms - sessionStorage.master;
 });
 
 socket.on('masterTime', function (data){
@@ -237,6 +242,7 @@ socket.on('masterTime', function (data){
   ms = time.getMilliseconds();
   var p = '<p>Sent file at: ' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#masterTime').append(p);
+  sessionStorage.master = ms;
 });
 
 function emitPlay(){
