@@ -337,7 +337,9 @@ function updateVelocities() {
     }, false);
 
   fileReader.onloadend =  function(e){
-    initSound(fileReader.result);
+    //initSound(fileReader.result);
+    audioBuffer = fileReader.result;
+    audio.initAudio(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
     for (var i = 0; i < n; i++) {
@@ -350,8 +352,8 @@ function updateVelocities() {
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
-      audio.initAudio(buffer);
-      playLocal();
+      //audio.initAudio(buffer);
+      //playLocal();
     });
   }
 
@@ -366,7 +368,7 @@ function playLocal() {
   if (audio.source) {
     audio.source.disconnect();
   }
-  audio.source.buffer = audioBuffer;
+  audio.initAudio(audioBuffer);
   if(shouldPlay){
     audio.source.start(0);//, sessionStorage.start);
   }
