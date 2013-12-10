@@ -59,8 +59,8 @@
       <br>
       <div>
         <p class="left">Controls</p>
-        <button onclick="emitPlay()" class="btn">Play</button>
-        <button onclick="emitStop()" class="btn">Stop</button>
+        <button onclick="emitPlay()" class="btn" disabled>Play</button>
+        <button onclick="emitStop()" class="btn" disabled>Stop</button>
       </div>
       <br>
       <div>
@@ -131,7 +131,8 @@
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
       var size = 0;
     	stream.on('data', function(data){
-        shouldPlay = 1;
+        shouldPlay = 0;
+        $('.btn').removeAttr('disabled');
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
