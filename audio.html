@@ -220,18 +220,7 @@ function playLocal() {
   }
 }
 
-function volumeChange(value){
-  socket.emit('volume', value);
-  gainNode.gain.value = value;
-}
 
-socket.on('volume', function(data){
-  gainNode.gain.value = data;
-  var v = document.getElementById("volume");
-  v.value = data;
-  $('#volume').attr("value", data);
-  console.log('volume = ' + data);
-})
 
 socket.on('play', function (data) {
   shouldPlay = 1;
