@@ -228,7 +228,7 @@ function volumeChange(value){
 
 socket.on('volume', function(data){
   gainNode.gain.value = value;
-  $('#volume').val(value);
+  $('#volume').attr("value", value);
   console.log('volume = ' + data);
 })
 
