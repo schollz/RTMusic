@@ -118,6 +118,7 @@
 	client.on('stream', function(stream, meta){
       // Reset Variables
       if(source){
+        source.noteOff(0);
         source.disconnect();
       }
       source = null;
