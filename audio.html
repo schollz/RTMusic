@@ -240,8 +240,6 @@ socket.on('masterTime', function (data){
 });
 
 function emitPlay(){
-  shouldPlay = 1;
-  playLocal();
   socket.emit('play', 'yes');
 }
 
