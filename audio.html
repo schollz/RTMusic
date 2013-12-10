@@ -227,8 +227,8 @@ socket.on('sync', function (data){
   shouldPlay = 1;
   startTime = 0;
   offset = 0;
-  source.noteOff(0);
-  source = null;
+  source.disconnect();
+  console.log(source);
   playLocal();
 })
 
