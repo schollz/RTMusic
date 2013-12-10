@@ -132,7 +132,6 @@
       var size = 0;
     	stream.on('data', function(data){
         shouldPlay = 0;
-        $('.btn').removeAttr('disabled');
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
@@ -168,6 +167,7 @@
     }, false);
 
   fileReader.onloadend =  function(e){
+    $('.btn').removeAttr('disabled');
     initSound(fileReader.result);
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
