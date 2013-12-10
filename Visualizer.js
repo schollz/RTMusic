@@ -1,35 +1,35 @@
 /* Visualizer init code */
 
 
-  var canvas = document.getElementById("canvas");
-var field = new FluidField(canvas);
-var display = new FluidDisplay(field);
-var audio = null; // initialize only if on chrome
-var detector = new BeatDetector();
+// var canvas = document.getElementById("canvas");
+// var field = new FluidField(canvas);
+// var display = new FluidDisplay(field);
+// var audio = null; // initialize only if on chrome
+// var detector = new BeatDetector();
 
-var start = new Date(); // reset after each fps calculation
-var initial = new Date(); // very beginning
-var frames = 0; // for fps calculation
+// var start = new Date(); // reset after each fps calculation
+// var initial = new Date(); // very beginning
+// var frames = 0; // for fps calculation
 
-var time = 0; // time since very beginning
-var offset = 0;
-var interval = 5; 
-var running = false; 
+// var time = 0; // time since very beginning
+// var offset = 0;
+// var interval = 5; 
+// var running = false; 
 
-var n = 72000; // number of particles
-var life = 100; // lifetime of particles in frames
-var px = new Float32Array(n); // x coordinate of particles
-var py = new Float32Array(n); // y coordinate of particles
-var pc = new Float32Array(n); // color of particle (hue)
-var pl = new Int16Array(n);   // age of particle 
+// var n = 72000; // number of particles
+// var life = 100; // lifetime of particles in frames
+// var px = new Float32Array(n); // x coordinate of particles
+// var py = new Float32Array(n); // y coordinate of particles
+// var pc = new Float32Array(n); // color of particle (hue)
+// var pl = new Int16Array(n);   // age of particle 
 
-var showVelocity = false;
-var showParticles = true;
+// var showVelocity = false;
+// var showParticles = true;
 
-var theta = 0;
-var velocity = 2;
-var radius = 8;
-var fft_resolution = 256;
+// var theta = 0;
+// var velocity = 2;
+// var radius = 8;
+// var fft_resolution = 256;
 
 function resetParticle(i) {
     var t = i / n;
