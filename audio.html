@@ -64,8 +64,7 @@
         <button onclick="emitSync()" class="btn">Sync Start</button>
       </div>
       <br>
-      <div>
-        <input id="volume" type="range" min="0" max="1" step=".1" value=".75" onchange="volumeChange(this.value)">      </div>
+
       <div>
         <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> </p>
       </div>
@@ -228,6 +227,8 @@ function volumeChange(value){
 
 socket.on('volume', function(data){
   gainNode.gain.value = data;
+  var v = document.getElementById("volume");
+  v.value = data;
   $('#volume').attr("value", data);
   console.log('volume = ' + data);
 })
