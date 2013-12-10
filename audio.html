@@ -214,6 +214,7 @@ function playLocal() {
   }
 }
 
+
 socket.on('play', function (data) {
   shouldPlay = 1;
   playLocal();
@@ -224,12 +225,8 @@ socket.on('pause', function (data) {
 });
 
 socket.on('sync', function (data){
-  shouldPlay = 1;
-  startTime = 0;
-  offset = 0;
-  source.disconnect();
-  console.log(source);
-  playLocal();
+   source.noteOff(0);
+   source.start(0);
 })
 
 socket.on('slaveStartStreamTime', function (data){
