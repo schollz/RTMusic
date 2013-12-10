@@ -59,8 +59,8 @@
       <br>
       <div>
         <p class="left">Controls</p>
-        <button onclick="emitPlay()" class="btn" disabled>Play</button>
-        <button onclick="emitStop()" class="btn" disabled>Stop</button>
+        <button onclick="emitPlay()" class="btn">Play</button>
+        <button onclick="emitStop()" class="btn">Stop</button>
       </div>
       <br>
       <div>
@@ -135,7 +135,7 @@
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
       var size = 0;
     	stream.on('data', function(data){
-        shouldPlay = 0;
+        shouldPlay = 1;
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
@@ -172,7 +172,6 @@
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
-    $('.btn').removeAttr('disabled');
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
