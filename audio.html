@@ -11,7 +11,6 @@
   <script src="FluidDisplay.js"></script>
   <script src="Music.js"></script>
   <script src="BeatDetector.js"></script>
-  <script src="Visualizer.js"></script>
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/darkstrap.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
@@ -97,7 +96,6 @@
 
   $( document ).ready(function() {
     sessionStorage.start = 0;
-    audio = new Audio();
   });
  	var context = new window.webkitAudioContext();
 	var source = null;
@@ -172,36 +170,45 @@
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
+    //audioBuffer = fileReader.result;
+    //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
 
+    /*for (var i = 0; i < n; i++) {
+      resetParticle(i);
+      pl[i] = Math.floor(Math.random() * life);
+    }
+    requestAnimationFrame(updateFrame);*/
   };
 
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
-      audio.initAudio(buffer);
+      //audio.initAudio(buffer);
       playLocal();
     });
   }
 
 function stopLocal() {
-  if (audio.source) {
-    audio.source.disconnect();
+  if (source) {
+    source.disconnect();
     sessionStorage.start = context.currentTime;
   }
 }
 
 function playLocal() {
-  if (audio.source) {
-    audio.source.disconnect();
+  if (source) {
+    source.disconnect();
   }
-  audio.source.buffer = audioBuffer;
+  source = context.createBufferSource();
+  source.connect(context.destination);
+  source.loop = false;
+  source.buffer = audioBuffer;
   if(shouldPlay){
-    audio.source.start(0);//, sessionStorage.start);
+    source.start(0);//, sessionStorage.start);
   }
 }
-
 
 socket.on('play', function (data) {
   shouldPlay = 1;
@@ -239,6 +246,7 @@ function emitPlay(){
 function emitStop(){
   socket.emit('pause', 'yes');
 }
+
 
 </script>
 </body>

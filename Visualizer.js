@@ -1,10 +1,10 @@
 /* Visualizer init code */
 
 
-var canvas = document.getElementById("canvas-fluid");
+  var canvas = document.getElementById("canvas-fluid");
 var field = new FluidField(canvas);
 var display = new FluidDisplay(field);
-var audio = null; // initialize only if on chrome
+//var audio = null; // initialize only if on chrome
 var detector = new BeatDetector();
 
 var start = new Date(); // reset after each fps calculation
@@ -49,7 +49,7 @@ function pulse(tmin, tmax) {
   }
 }
 
-function updateFrame() { 
+/*function updateFrame() { 
   
   requestAnimationFrame(updateFrame);
 
@@ -66,7 +66,7 @@ function updateFrame() {
     frames = 0;
   }
 
-  updateVelocities();
+  updateVelocities(audio);
   field.update();
 
   for (var i = 0; i < n; i++) {
@@ -89,11 +89,11 @@ function updateFrame() {
   if (showVelocity)
     display.renderVelocityField(field);
 
-}
+}*/
 
-function updateVelocities() {
+function updateVelocities(aud) {
 
-  detector.sample(audio.analyser);
+  detector.sample(aud.analyser);
 
   // big beats
   if (detector.beatChance > 1.6) {
