@@ -162,7 +162,6 @@
         socket.emit('masterSend', now.getTime());
         shouldPlay = 0;
         fileReader.readAsArrayBuffer(file);
-        console.log('sending data at this time ' + now + ' miliseconds ' + now.getMilliseconds());
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -182,12 +181,6 @@
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
-      if (!source) {
-        source = context.createBufferSource();
-        source.connect(context.destination);
-        source.loop = false;
-        source.buffer = audioBuffer;
-      }
       //audio.initAudio(buffer);]source = context.createBufferSource();
       playLocal();
     });
@@ -196,10 +189,6 @@
 function stopLocal() {
   if (source) {
     source.noteOff(0);
-    source = context.createBufferSource();
-    source.connect(context.destination);
-    source.loop = false;
-    source.buffer = audioBuffer;
     sessionStorage.start = context.currentTime;
   }
 }
@@ -208,10 +197,10 @@ function playLocal() {
   if (source) {
     source.noteOff(0);
   }
-  /*source = context.createBufferSource();
+  source = context.createBufferSource();
   source.connect(context.destination);
   source.loop = false;
-  source.buffer = audioBuffer;*/
+  source.buffer = audioBuffer;
   if(shouldPlay){
     source.start(0);//, sessionStorage.start);
   }
