@@ -190,7 +190,7 @@
 
 function stopLocal() {
   if (source) {
-    source.stop();
+    source.stop(0);
     sessionStorage.offset = context.currentTime - sessionStorage.start;
   }
 }
