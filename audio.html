@@ -178,11 +178,7 @@
     initSound(fileReader.result);
     // Get more blobs when finished:
     isBufferReady = 1;
-    for (var i = 0; i < n; i++) {
-      resetParticle(i);
-      pl[i] = Math.floor(Math.random() * life);
-    }
-    requestAnimationFrame(updateFrame);
+
   };
 
   function initSound(buf) {
@@ -226,7 +222,7 @@ socket.on('slaveStartStreamTime', function (data){
   m = time.getMinutes();
   s = time.getSeconds();
   ms = time.getMilliseconds();
-  var p = '<p>' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
+  var p = '<p>Began playing at: ' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#slaveTime').append(p);
 });
 
@@ -236,7 +232,7 @@ socket.on('masterTime', function (data){
   m = time.getMinutes();
   s = time.getSeconds();
   ms = time.getMilliseconds();
-  var p = '<p>' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
+  var p = '<p>Sent file at: ' + h + ':' + m + ':' + s + ':' + '<strong>' + ms + '</strong></p>';
   $('#masterTime').append(p);
 });
 
