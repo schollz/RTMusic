@@ -132,8 +132,9 @@
       streamData = [];
       sessionStorage.start = 0;
 
+      var startTime = new Date();
     socket.emit('slaveStartStreamSend', {"id" : socket.id, 
-                                        "time":start.getTime()});
+                                        "time":startTime.getTime()});
 
       var size = 0;
 
