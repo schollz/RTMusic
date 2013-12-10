@@ -75,6 +75,6 @@ BeatDetector.prototype.sample = function(analyser) {
       var weight = 2 - (i / this.historyBins);
       this.binChance[i] = Math.abs(cur - mean) / (stdev + 0.01);
     }
-    // console.log(this.beatChance);
+     console.log(this.beatChance);
   }
 }
