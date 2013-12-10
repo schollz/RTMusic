@@ -100,6 +100,8 @@
 
   <script>
 
+  
+
   $( document ).ready(function() {
     sessionStorage.start = 0;
     audio = new Audio();
@@ -212,7 +214,6 @@ function playLocal() {
   }
 }
 
-
 socket.on('play', function (data) {
   shouldPlay = 1;
   playLocal();
@@ -249,6 +250,49 @@ function emitPlay(){
 function emitStop(){
   socket.emit('pause', 'yes');
 }
+
+function updateFrame() { 
+  
+  requestAnimationFrame(updateFrame);
+
+  if (!audio.playing) return;
+
+  var end = new Date;
+  time = end - initial;
+  offset = time * 0.0001;
+
+  frames++;
+  if (end - start > 500) {
+    
+    start = end;
+    frames = 0;
+  }
+
+  updateVelocities(audio);
+  field.update();
+
+  for (var i = 0; i < n; i++) {
+    var jitter = (1 - pl[i] / life);
+    var vx = 10 * field.getXVelocity(px[i], py[i]);
+    var vy = 10 * field.getYVelocity(px[i], py[i]);
+    px[i] += vx + (Math.random() - 0.5) * jitter;
+    py[i] += vy + (Math.random() - 0.5) * jitter;
+    pl[i]--;
+    if (pl[i] < 1 || px[i] < 1 || px[i] > field.width || py[i] < 1 || py[i] > field.height - 1) {
+      resetParticle(i);
+    }
+  }
+  
+  display.clear();
+  
+  if (showParticles)
+    display.renderParticles(field, px, py, pc, pl);
+  
+  if (showVelocity)
+    display.renderVelocityField(field);
+
+}
+
 
 </script>
 </body>
