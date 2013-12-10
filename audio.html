@@ -182,24 +182,31 @@
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
       audioBuffer = buffer;
-      //audio.initAudio(buffer);
+      if (!source) {
+        source = context.createBufferSource();
+        source.connect(context.destination);
+        source.loop = false;
+        source.buffer = audioBuffer;
+      }
+      //audio.initAudio(buffer);]source = context.createBufferSource();
       playLocal();
     });
   }
 
 function stopLocal() {
   if (source) {
-    source.disconnect();
+    source.noteOff(0);
+    source = context.createBufferSource();
+    source.connect(context.destination);
+    source.loop = false;
+    source.buffer = audioBuffer;
     sessionStorage.start = context.currentTime;
   }
 }
 
 function playLocal() {
-  if (!source) {
-    source = context.createBufferSource();
-    source.connect(context.destination);
-    source.loop = false;
-    source.buffer = audioBuffer;
+  if (source) {
+    source.noteOff(0);
   }
   /*source = context.createBufferSource();
   source.connect(context.destination);
