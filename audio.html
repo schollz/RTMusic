@@ -196,7 +196,6 @@ function stopLocal() {
 
 function playLocal() {
   if (!source) {
-    source.disconnect();
     source = context.createBufferSource();
     source.connect(context.destination);
     source.loop = false;
