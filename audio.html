@@ -7,10 +7,10 @@
   <title>RTMusic</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="FluidField.js"></script>
-  <script src="FluidDisplay.js"></script>
-  <script src="Music.js"></script>
-  <script src="BeatDetector.js"></script>
+   <!-- <script src="FluidField.js"></script>
+  // <script src="FluidDisplay.js"></script>
+  // <script src="Music.js"></script>
+  // <script src="BeatDetector.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/darkstrap.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
@@ -180,6 +180,7 @@
 
   function initSound(buf) {
     context.decodeAudioData(buf, function(buffer) {
+      audioBuffer = null;
       audioBuffer = buffer;
       //audio.initAudio(buffer);]source = context.createBufferSource();
       playLocal();
@@ -190,6 +191,7 @@ function stopLocal() {
   if (source) {
     offset += context.currentTime - startTime;
     source.noteOff(0);
+    shouldPlay = 0;
   }
 }
 
