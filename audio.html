@@ -60,7 +60,8 @@
       <div>
         <p class="left">Controls</p>
         <button onclick="emitPlay()" class="btn">Play</button>
-        <button onclick="emitStop()" class="btn">Stop</button>
+        <button onclick="emitStop()" class="btn">Pause</button>
+        <button onclick="emitSync()" class="btn">Sync Start</button>
       </div>
       <br>
       <div>
@@ -222,6 +223,13 @@ socket.on('pause', function (data) {
   stopLocal();
 });
 
+socket.on('sync', function (data){
+  shouldPlay = 1;
+  startTime = 0;
+  offset = 0;
+  playLocal();
+})
+
 socket.on('slaveStartStreamTime', function (data){
   var time = new Date(data.time);
   h = time.getHours();
@@ -250,6 +258,10 @@ function emitPlay(){
 
 function emitStop(){
   socket.emit('pause', 'yes');
+}
+
+function emitSync(){
+  socket.emit('sync', 'yes');
 }
 
 
