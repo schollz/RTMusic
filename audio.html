@@ -194,7 +194,7 @@
 
 function stopLocal() {
   if (source) {
-    sessionStorage.offset = context.currentTime - sessionStorage.start;
+    sessionStorage.offset += context.currentTime - sessionStorage.start;
     source.noteOff(0);
   }
 }
@@ -209,7 +209,7 @@ function playLocal() {
   source.connect(context.destination);
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
-    source.start(0, sessionStorage.offset % source.buffer.duration);
+    source.start(0, sessionStorage.offset);
   }
 }
 
