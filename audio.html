@@ -229,6 +229,7 @@ function volumeChange(value){
 socket.on('volume', function(data){
   gainNode.gain.value = value;
   $('#volume').val(value);
+  console.log('volume = ' + data);
 })
 
 socket.on('play', function (data) {
