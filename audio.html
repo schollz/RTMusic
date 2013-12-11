@@ -234,7 +234,7 @@ function playLocal() {
     source.start(0, offset);
 
     if((visualizerExists == 0)  && shouldVisualize){
-      initVisualizer();
+      //initVisualizer();
     }
   }
 }
@@ -251,14 +251,14 @@ function initVisualizer(){
 }
 
 
-window.onload = function() {
-  for (var i = 0; i < n; i++) {
-    resetParticle(i);
-    pl[i] = Math.floor(Math.random() * life);
-  }
+// window.onload = function() {
+//   for (var i = 0; i < n; i++) {
+//     resetParticle(i);
+//     pl[i] = Math.floor(Math.random() * life);
+//   }
 
-  requestAnimationFrame(updateFrame);
-}
+//   requestAnimationFrame(updateFrame);
+// }
 
 
 
