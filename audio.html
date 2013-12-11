@@ -121,6 +121,7 @@
   var shouldVisualize = 0;
   var visualizerExists = 0;
   var finalSize = 0;
+  var size = 0;
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -142,9 +143,10 @@
       startTime = context.currentTime;
       offset = 0;
 
+      size = 0;
+
       var startTime = new Date();
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
-      var size = 0;
     	stream.on('data', function(data){
         shouldPlay = 1;
         size += data.byteLength;
