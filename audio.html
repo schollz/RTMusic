@@ -164,8 +164,8 @@
 
   function streamAudio(){
     if(isBufferReady){
-      var blob = new Blob(streamData);
       isBufferReady = 0;
+      var blob = new Blob(streamData);
       fileReader.readAsArrayBuffer(blob);
     }
   }
@@ -233,9 +233,9 @@ function playLocal() {
   if (shouldPlay) {
     source.start(0, offset);
 
-    if((visualizerExists == 0)  && shouldVisualize){
-      //initVisualizer();
-    }
+    // if((visualizerExists == 0)  && shouldVisualize){
+    //   //initVisualizer();
+    // }
   }
 }
 
