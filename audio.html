@@ -159,6 +159,9 @@
       	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
         shouldVisualize = 0;
         finalSize = size;
+
+        startVisualizer();
+
     	});
 	});
 
@@ -186,7 +189,7 @@
         if(source){
           source.noteOff(0);
         }
-        shouldVisualize = 1;
+        startVisualizer();
 
     }, false);
 
@@ -232,13 +235,14 @@ function playLocal() {
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
     source.start(0, offset);
-
-    // if((visualizerExists == 0)  && shouldVisualize){
-      initVisualizer();
-    // }
   }
 }
 
+function startVisualizer(){
+  setTimeout(function(){
+    initVisualizer()
+  }, 1000);
+}
 
 function initVisualizer(){
   visualizerExists = 1;
