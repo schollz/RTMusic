@@ -162,8 +162,8 @@
 
   function streamAudio(){
     if(isBufferReady){
-      isBufferReady = 0;
       var blob = new Blob(streamData);
+      isBufferReady = 0;
       fileReader.readAsArrayBuffer(blob);
     }
   }
@@ -174,13 +174,8 @@
         var now = new Date();
         client.send(file);
         socket.emit('masterSend', now.getTime());
-        shouldPlay = 1;
+        shouldPlay = 0;
         fileReader.readAsArrayBuffer(file);
-        if(source){
-          //startTime = context.currentTime;
-          source.noteOff(0);
-          source = null;
-        }
         //startVisualizer();
 
     }, false);
@@ -217,9 +212,9 @@ function playLocal() {
   source = context.createBufferSource();
   // Connect graph
   source.buffer = audioBuffer;
+  source.loop = true;
   source.connect(context.destination);
 
-  source.loop = true;
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
     source.start(0, offset);
