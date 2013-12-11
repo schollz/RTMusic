@@ -138,7 +138,7 @@
       source = null;
       audioBuffer = null;
       streamData = [];
-      startTime = 0;
+      startTime = context.currentTime;
       offset = 0;
 
       var startTime = new Date();
@@ -246,9 +246,7 @@ function initVisualizer(){
 }
 
 
-
-function initParticles()
-{
+window.onload = function() {
   for (var i = 0; i < n; i++) {
     resetParticle(i);
     pl[i] = Math.floor(Math.random() * life);
