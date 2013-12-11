@@ -13,11 +13,11 @@ function BeatDetector() {
   }
 }
 
-BeatDetector.prototype.sample = function(analyser) {
-  var fftSize = analyser.frequencyBinCount;
+BeatDetector.prototype.sample = function(analyser2) {
+  var fftSize = analyser2.frequencyBinCount;
   var freqByteData = new Uint8Array(fftSize);
-  audio.analyser.smoothingTimeConstant = 0.1;
-  analyser.getByteFrequencyData(freqByteData);
+  analyser.smoothingTimeConstant = 0.1;
+  analyser2.getByteFrequencyData(freqByteData);
   // get average level
   var sum = 0;
   for (var i = 0; i < fftSize; i++) {
@@ -75,6 +75,5 @@ BeatDetector.prototype.sample = function(analyser) {
       var weight = 2 - (i / this.historyBins);
       this.binChance[i] = Math.abs(cur - mean) / (stdev + 0.01);
     }
-     console.log(this.beatChance);
   }
 }

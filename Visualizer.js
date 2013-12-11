@@ -1,7 +1,7 @@
 /* Visualizer init code */
 
 
-  var canvas = document.getElementById("canvas-fluid");
+var canvas = document.getElementById("canvas-fluid");
 var field = new FluidField(canvas);
 var display = new FluidDisplay(field);
 //var audio = null; // initialize only if on chrome
@@ -38,7 +38,7 @@ function resetParticle(i) {
     py[i] = field.height * 0.5 + r * Math.sin(t * 2 * Math.PI);
     pc[i] = t + offset;
     pc[i] -= Math.floor(pc[i]);
-    pl[i] = life; 
+    pl[i] = life;
 }
 
 function pulse(tmin, tmax) {
@@ -49,11 +49,11 @@ function pulse(tmin, tmax) {
   }
 }
 
-/*function updateFrame() { 
+function updateFrame() { 
   
   requestAnimationFrame(updateFrame);
 
-  if (!audio.playing) return;
+  if (!playing) return;
 
   var end = new Date;
   time = end - initial;
@@ -66,7 +66,7 @@ function pulse(tmin, tmax) {
     frames = 0;
   }
 
-  updateVelocities(audio);
+  updateVelocities();
   field.update();
 
   for (var i = 0; i < n; i++) {
@@ -89,11 +89,11 @@ function pulse(tmin, tmax) {
   if (showVelocity)
     display.renderVelocityField(field);
 
-}*/
+}
 
-function updateVelocities(aud) {
+function updateVelocities() {
 
-  detector.sample(aud.analyser);
+  detector.sample(analyser);
 
   // big beats
   if (detector.beatChance > 1.6) {
@@ -126,34 +126,5 @@ function updateVelocities(aud) {
 
 }
 
-// window.onload = function() {
-  
-//   audio = new Audio();
-  
-//   document.addEventListener('drop', function(evt) {   
-//     evt.stopPropagation();
-//     evt.preventDefault();
-//     if (audio.source) audio.source.disconnect(); // clean up previous mp3
-//     message("Loading User Audio...");
-//     var droppedFiles = evt.dataTransfer.files;
-//     var reader = new FileReader();
-//     reader.onload = function(fileEvent) {
-//       var data = fileEvent.target.result;
-//       audio.initAudio(data);
-//     };
-//     reader.readAsArrayBuffer(droppedFiles[0]);
-//   }, false);
 
-//   document.addEventListener('dragover', function(evt) {
-//     evt.stopPropagation();
-//     evt.preventDefault();
-//     return false;
-//   }, false);  
 
-//   for (var i = 0; i < n; i++) {
-//     resetParticle(i);
-//     pl[i] = Math.floor(Math.random() * life);
-//   }
-
-//   requestAnimationFrame(updateFrame);
-// }

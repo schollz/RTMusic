@@ -7,10 +7,7 @@
   <title>RTMusic</title>
   <script src="http://cdn.binaryjs.com/0/binary.js"></script>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-   <!-- <script src="FluidField.js"></script>
-  // <script src="FluidDisplay.js"></script>
-  // <script src="Music.js"></script>
-  // <script src="BeatDetector.js"></script> -->
+ 
   <link rel="stylesheet" type="text/css" href="/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/darkstrap.css">
   <link rel="stylesheet" type="text/css" href="/style.css">
@@ -66,7 +63,7 @@
       <br>
 
       <div>
-        <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> </p>
+        <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> <br> WARNING: MP3s are only compatible with Chrome. Combatible with wav files in Firefox, Safari, and Operah.</p>
       </div>
     </div>
     <div class="col-md-8">
@@ -93,22 +90,34 @@
 	
 
 
-
+   <script src="FluidField.js"></script>
+   <script src="FluidDisplay.js"></script>
+   <script src="Music.js"></script>
+   <script src="BeatDetector.js"></script>
+   <script src="Visualizer.js"></script>  
   <script>
+
+
 
   var startTime = 0;
   var offset = 0;
  	var context = new window.webkitAudioContext();
-  var gainNode = context.createGain();
 
 	var source = null;
 	var audioBuffer = null;
   var fileReader = new FileReader();
 
+
+  var processor = null;    // audioContext.createJavaScriptNode(2048 , 1 , 1 );
+  var analyser = null;     // audioContext.createAnalyser();
+  var playing = false;
+  var fftSize = 128;
+
+
   //Stream source?
   var streamData = [];
   var isBufferReady = 1;
-  var shouldPlay = 0;
+  var shouldPlay = 1;
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -165,9 +174,11 @@
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
-        shouldPlay = 0;
+        shouldPlay = 1;
         fileReader.readAsArrayBuffer(file);
-        source.noteOff(0);
+        if(source){
+          source.noteOff(0);
+        }
     }, false);
 
   fileReader.onloadend =  function(e){
@@ -211,14 +222,43 @@ function playLocal() {
   source = context.createBufferSource();
   // Connect graph
   source.buffer = audioBuffer;
+
+  processor = context.createJavaScriptNode(2048 , 1 , 1 );
+  analyser = context.createAnalyser();
+  source.connect(context.destination);
+  source.connect(analyser);
+  analyser.connect(processor);
+  processor.connect(context.destination);
+  playing = true;
+
   source.loop = true;
-  source.connect(gainNode);
-  gainNode.connect(context.destination);
   // Start playback, but make sure we stay in bound of the buffer.
   if (shouldPlay) {
     source.start(0, offset);
   }
 }
+
+
+
+
+window.onload = function() {
+
+  for (var i = 0; i < n; i++) {
+    resetParticle(i);
+    pl[i] = Math.floor(Math.random() * life);
+  }
+
+  requestAnimationFrame(updateFrame);
+}
+
+
+
+  function initVisualizer () {
+    console.log("initing Visualizer");
+
+    //this.source.start(0);
+    //message("OK");
+  }
 
 
 
@@ -240,8 +280,7 @@ socket.on('sync', function (data){
   // Connect graph
   source.buffer = audioBuffer;
   source.loop = true;
-  source.connect(gainNode);
-  gainNode.connect(context.destination);
+  source.connect(context.destination);
   source.start(0);
 
 })
