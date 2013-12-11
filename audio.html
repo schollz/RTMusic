@@ -90,11 +90,11 @@
 	
 
 
-  <!--  // <script src="FluidField.js"></script>
-   //  <script src="FluidDisplay.js"></script>
-   //  <script src="Music.js"></script>
-   // <script src="BeatDetector.js"></script>
-   //  <script src="Visualizer.js"></script> -->
+    <script src="FluidField.js"></script>
+     <script src="FluidDisplay.js"></script>
+     <script src="Music.js"></script>
+    <script src="BeatDetector.js"></script>
+     <script src="Visualizer.js"></script>
   <script>
 
 
@@ -157,6 +157,7 @@
     		console.log("time to fetch all data: " + (now - startTime.getTime()) + " ms");
       	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
         // shouldVisualize = 0;
+        startVisualizer();
 
     	});
 	});
@@ -183,16 +184,13 @@
           source = null;
           source.disconnect();
         }
-        // startVisualizer();
+        startVisualizer();
 
     }, false);
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
-    //audioBuffer = fileReader.result;
-    //audio.initAudio(fileReader.result);
-    // Get more blobs when finished:
-
+    //buffer is ready to handle more parts
     isBufferReady = 1;
   };
 
@@ -231,32 +229,32 @@ function playLocal() {
   }
 }
 
-// function startVisualizer(){
-//   setTimeout(function(){
-//     initVisualizer()
-//   }, 1000);
-// }
+function startVisualizer(){
+  setTimeout(function(){
+    initVisualizer()
+  }, 5000);
+}
 
-// function initVisualizer(){
-//   visualizerExists = 1;
-//   processor = context.createJavaScriptNode(2048 , 1 , 1 );
-//   analyser = context.createAnalyser();
-//   source.connect(analyser);
-//   analyser.connect(processor);
-//   processor.connect(context.destination);
-//   playing = true;
+function initVisualizer(){
+  visualizerExists = 1;
+  processor = context.createJavaScriptNode(2048 , 1 , 1 );
+  analyser = context.createAnalyser();
+  source.connect(analyser);
+  analyser.connect(processor);
+  processor.connect(context.destination);
+  playing = true;
 
-// }
+}
 
 
-// window.onload = function() {
-//   for (var i = 0; i < n; i++) {
-//     resetParticle(i);
-//     pl[i] = Math.floor(Math.random() * life);
-//   }
+window.onload = function() {
+  for (var i = 0; i < n; i++) {
+    resetParticle(i);
+    pl[i] = Math.floor(Math.random() * life);
+  }
 
-//   requestAnimationFrame(updateFrame);
-// }
+  requestAnimationFrame(updateFrame);
+}
 
 
 
