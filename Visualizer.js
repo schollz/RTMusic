@@ -16,7 +16,7 @@ var offset = 0;
 var interval = 5; 
 var running = false; 
 
-var n = 72000; // number of particles
+var n = 7000; // number of particles
 var life = 100; // lifetime of particles in frames
 var px = new Float32Array(n); // x coordinate of particles
 var py = new Float32Array(n); // y coordinate of particles
