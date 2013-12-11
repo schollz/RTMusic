@@ -185,6 +185,7 @@
         shouldPlay = 1;
         fileReader.readAsArrayBuffer(file);
         if(source){
+          startTime = context.currentTime;
           source.noteOff(0);
         }
         // startVisualizer();
