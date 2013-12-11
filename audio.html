@@ -148,7 +148,6 @@
       var startTime = new Date();
       socket.emit('slaveStartStreamSend', {"id" : socket.id, "time":startTime.getTime()});
     	stream.on('data', function(data){
-        shouldPlay = 1;
         size += data.byteLength;
         streamData.push(data);
         streamAudio();
@@ -158,7 +157,6 @@
     		console.log("time to fetch all data: " + (now - startTime.getTime()) + " ms");
       	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
         shouldVisualize = 0;
-        finalSize = size;
 
         // startVisualizer();
 
@@ -195,7 +193,7 @@
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
-    startTime = context.currentTime;
+    startTime = 0;
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
