@@ -196,9 +196,7 @@
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
-    if(finalSize == size){
-      shouldVisualize = 1;
-    }
+
     isBufferReady = 1;
   };
 
@@ -235,7 +233,7 @@ function playLocal() {
   if (shouldPlay) {
     source.start(0, offset);
 
-    if(!visualizerExists && shouldVisualize){
+    if((visualizerExists == 0)  && shouldVisualize){
       initVisualizer();
     }
   }
