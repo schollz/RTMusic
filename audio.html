@@ -227,34 +227,34 @@ function playLocal() {
   if (shouldPlay) {
     source.start(0, offset);
 
-    // if(!visualizerExists && shouldVisualize){
-    //   initVisualizer();
-    // }
+    if(!visualizerExists && shouldVisualize){
+      initVisualizer();
+    }
   }
 }
 
-// function initVisualizer(){
-//   visualizerExists = 1;
-//   processor = context.createJavaScriptNode(2048 , 1 , 1 );
-//   analyser = context.createAnalyser();
-//   source.connect(analyser);
-//   analyser.connect(processor);
-//   processor.connect(context.destination);
-//   playing = true;
+function initVisualizer(){
+  initParticles();
+  visualizerExists = 1;
+  processor = context.createJavaScriptNode(2048 , 1 , 1 );
+  analyser = context.createAnalyser();
+  source.connect(analyser);
+  analyser.connect(processor);
+  processor.connect(context.destination);
+  playing = true;
 
-// }
+}
 
 
 
-// window.onload = function() {
+function initParticles()
+  for (var i = 0; i < n; i++) {
+    resetParticle(i);
+    pl[i] = Math.floor(Math.random() * life);
+  }
 
-//   for (var i = 0; i < n; i++) {
-//     resetParticle(i);
-//     pl[i] = Math.floor(Math.random() * life);
-//   }
-
-//   requestAnimationFrame(updateFrame);
-// }
+  requestAnimationFrame(updateFrame);
+}
 
 
 
