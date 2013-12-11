@@ -118,9 +118,8 @@
   var streamData = [];
   var isBufferReady = 1;
   var shouldPlay = 1;
-  var shouldVisualize = 0;
-  var visualizerExists = 0;
-  var finalSize = 0;
+  // var shouldVisualize = 0;
+  // var visualizerExists = 0;
   var size = 0;
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
@@ -179,7 +178,7 @@
         shouldPlay = 1;
         fileReader.readAsArrayBuffer(file);
         if(source){
-          startTime = context.currentTime;
+          //startTime = context.currentTime;
           source.noteOff(0);
           source = null;
           source.disconnect();
