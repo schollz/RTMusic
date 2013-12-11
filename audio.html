@@ -66,27 +66,30 @@
         <p class="left">Audio files are loaded using the infamous <a href="https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html">webaudio api</a> and sent using <a href="http://binaryjs.com/">binaryJS</a>. Real time communications are accomplished through <a href="http://socket.io/">socket.io.</a> <br> WARNING: MP3s are only compatible with Chrome. Combatible with wav files in Firefox, Safari, and Operah.</p>
       </div>
     </div>
-    <div class="col-md-8">
+
+
+      <br>
+  <div class="col-md-8">
+      <div><h3>Real Time Analytics</h3></div>
+
+        <div class="col-md-4">
+          <div id="slaveTime">
+            <h4>Slaves</h4>
+          </div>  
+        </div>
+        <div class="col-md-4">
+          <div id="masterTime">
+            <h4>Master</h4>
+          </div>
+        </div>
+  </div>
+
+    <!-- <div class="col-md-8">
       <canvas id="canvas-fluid" width="600" height="400"></canvas>
-    </div>
+    </div> -->
   </div>                             <!-- END ROW -->
   
-  <br>
-  <div><h3>Real Time Analytics</h3></div>
-
-  <div class="row">                    <!-- BEGIN ROW -->
-    <div class="col-md-6">
-      <div id="slaveTime">
-        <h4>Slaves</h4>
-      </div>  
-    </div>
-    <div class="col-md-6">
-      <div id="masterTime">
-        <h4>Master</h4>
-      </div>
-    </div>
-  </div>
-</div>                                  <!-- END ROW -->
+                                <!-- END ROW -->
 	
 
 
