@@ -117,7 +117,7 @@
   //Stream source?
   var streamData = [];
   var isBufferReady = 1;
-  var shouldPlay = 1;
+  var shouldPlay = 0;
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -174,7 +174,7 @@
         client.send(file);
         var now = new Date();
         socket.emit('masterSend', now.getTime());
-        shouldPlay = 1;
+        shouldPlay = 0;
         fileReader.readAsArrayBuffer(file);
         if(source){
           source.noteOff(0);
@@ -223,6 +223,23 @@ function playLocal() {
   // Connect graph
   source.buffer = audioBuffer;
 
+  // processor = context.createJavaScriptNode(2048 , 1 , 1 );
+  // analyser = context.createAnalyser();
+  // source.connect(context.destination);
+  // source.connect(analyser);
+  // analyser.connect(processor);
+  // processor.connect(context.destination);
+  // playing = true;
+
+  source.loop = true;
+  // Start playback, but make sure we stay in bound of the buffer.
+  if (shouldPlay) {
+    source.start(0, offset);
+    initVisualizer();
+  }
+}
+
+function initVisualizer(){
   processor = context.createJavaScriptNode(2048 , 1 , 1 );
   analyser = context.createAnalyser();
   source.connect(context.destination);
@@ -231,13 +248,7 @@ function playLocal() {
   processor.connect(context.destination);
   playing = true;
 
-  source.loop = true;
-  // Start playback, but make sure we stay in bound of the buffer.
-  if (shouldPlay) {
-    source.start(0, offset);
-  }
 }
-
 
 
 
@@ -250,15 +261,6 @@ window.onload = function() {
 
   requestAnimationFrame(updateFrame);
 }
-
-
-
-  function initVisualizer () {
-    console.log("initing Visualizer");
-
-    //this.source.start(0);
-    //message("OK");
-  }
 
 
 
