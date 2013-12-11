@@ -120,6 +120,7 @@
   var shouldPlay = 1;
   var shouldVisualize = 0;
   var visualizerExists = 0;
+  var finalSize = 0;
 
   var binaryHost = location.origin.replace(/^http/, 'ws');
 	var client = new BinaryClient(binaryHost + '/binary-endpoint');
@@ -155,6 +156,7 @@
     		console.log("time to fetch all data: " + (now - startTime.getTime()) + " ms");
       	console.log("total buffers: " + streamData.length + " , total size: " + (size/1000000) + " mb");
         shouldVisualize = 0;
+        finalSize = size;
     	});
 	});
 
@@ -188,9 +190,13 @@
 
   fileReader.onloadend =  function(e){
     initSound(fileReader.result);
+    startTime = context.currentTime;
     //audioBuffer = fileReader.result;
     //audio.initAudio(fileReader.result);
     // Get more blobs when finished:
+    if(finalSize = size){
+      shouldVisualize = 1;
+    }
     isBufferReady = 1;
   };
 
